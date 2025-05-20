@@ -1,0 +1,42 @@
+# Node modules
+node_modules/
+
+# Build output
+dist/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment variables
+.env
+.env.*
+
+# IDE/editor files
+.vscode/
+.DS_Store
+*.swp
+
+# OS files
+Thumbs.db
+
+# TypeScript
+*.tsbuildinfo
+
+# Misc
+*.log
+
+# Ignore build output in client and server
+client/dist/
+server/dist/
+
+# Ignore coverage
+coverage/
+
+# Ignore local .env files
+client/.env*
+server/.env*
+client/package-lock.json
+client/server/package-lock.json
+package-lock.json
