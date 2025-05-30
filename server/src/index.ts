@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { loadApiRoutes } from './loadApiRoutes.js';
+import fs from 'fs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -16,7 +17,10 @@ await loadApiRoutes(app, __dirname).catch((error) => {
 });
 
 // Serve static files from the client build directory
-const clientBuildPath = path.join(__dirname, '../../../../client/dist');
+let clientBuildPath = path.resolve(__dirname, '../../client/dist');
+if (!fs.existsSync(path.join(clientBuildPath, 'index.html'))) {
+  clientBuildPath = path.resolve(__dirname, '../../../../client/dist');
+}
 console.log(`Server directory: ${clientBuildPath}`);
 app.use(express.static(clientBuildPath));
 app.get(/^\/(?!api\/).*/, (req: Request, res: Response) => {
