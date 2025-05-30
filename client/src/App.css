@@ -40,3 +40,39 @@
 .read-the-docs {
   color: #888;
 }
+
+/* Navigation bar styles */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: #222;
+  padding: 20px 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.navbar-link {
+  margin-right: 40px;
+  font-size: 32px;
+  color: #fff;
+  text-decoration: none;
+  font-weight: normal;
+  transition: color 0.2s, font-weight 0.2s;
+}
+
+.navbar-link:last-child {
+  margin-right: 0;
+}
+
+.navbar-link.active {
+  color: #61dafb;
+  font-weight: bold;
+}
+
+.app-content {
+  padding-top: 100px;
+}

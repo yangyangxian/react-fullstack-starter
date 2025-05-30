@@ -1,20 +1,22 @@
 import { Routes, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import AdminPage from './pages/AdminPage';
-import { NavLink, Navigation } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
+import './App.css';
 
 function App() {
   return (
     <div>
-      <div style={{marginBottom: '80px'}}>
-        <NavLink to="/" style={{ marginRight: '20px', fontSize: '50px' }}>Home</NavLink>
-        <NavLink to="/admin" style={{ fontSize: '50px' }}>Admin</NavLink>
+      <nav className="navbar">
+        <NavLink to="/" className={({ isActive }) => "navbar-link" + (isActive ? " active" : "")}>Home</NavLink>
+        <NavLink to="/admin" className={({ isActive }) => "navbar-link" + (isActive ? " active" : "")}>Admin</NavLink>
+      </nav>
+      <div className="app-content">
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/admin" element={<AdminPage />} />
+        </Routes>
       </div>
-
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/admin" element={<AdminPage />} />
-      </Routes>
     </div>
   );
 }
