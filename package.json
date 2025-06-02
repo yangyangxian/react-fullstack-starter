@@ -3,9 +3,12 @@
   "scripts": {
     "start": "npm start --prefix server",
     "build": "npm run build --prefix server",
-    "dev": "npm run dev --prefix server",
+    "dev": "concurrently \"npm --prefix server run dev\" \"npm --prefix client run dev\"",
     "install:server": "npm install --prefix server",
     "install:client": "npm install --prefix client",
     "install:all": "npm install --prefix server && npm install --prefix client"
+  },
+  "dependencies": {
+    "concurrently": "^9.1.2"
   }
 }

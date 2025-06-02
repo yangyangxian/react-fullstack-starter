@@ -8,9 +8,7 @@
     "build": "npm run build:client && npm run build:server",
     "build:client": "npm --prefix ../client run build",
     "build:server": "tsc -p tsconfig.json",
-    "dev": "concurrently \"npm run dev:client\" \"npm run dev:server\"",
-    "dev:client": "npm --prefix ../client run dev",
-    "dev:server": "tsx watch src/index.ts"
+    "dev": "tsx watch src/index.ts"
   },
   "dependencies": {
     "express": "^5.1.0"

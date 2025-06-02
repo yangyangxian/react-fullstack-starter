@@ -7,7 +7,6 @@ function AdminPage() {
   const [userHello, setUserHello] = useState<HelloNameResponse | null>(null);
 
   useEffect(() => {
-    // Fetch /api/hello
     fetch('/api/hello')
       .then(res => res.json())
       .then((data: HelloResponse) => setHello(data));
