@@ -4,12 +4,13 @@ import { fileURLToPath } from 'url';
 import { loadApiRoutes } from './loadApiRoutes.js';
 import fs from 'fs';
 import { Server } from 'http';
+import configs from './config.js'; 
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const PORT: number = process.env.PORT ? parseInt(process.env.PORT) : 5050;
+const PORT: number = configs.port;
 
 // Register API routes, then start the server
 await loadApiRoutes(app, __dirname).catch((error) => {

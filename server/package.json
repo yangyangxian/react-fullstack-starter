@@ -4,14 +4,16 @@
   "main": "dist/server/index.js",
   "type": "module",
   "scripts": {
-    "start": "npm run build:client && npm run build:server && node dist/server/src/index.js",
+    "start": "npm run build && node dist/server/src/index.js",
     "build": "tsc -p tsconfig.json",
     "dev": "tsx watch src/index.ts"
   },
   "dependencies": {
+    "dotenv": "^16.5.0",
     "express": "^5.1.0"
   },
   "devDependencies": {
+    "@types/dotenv": "^6.1.1",
     "@types/express": "^5.0.2",
     "@types/node": "^20.0.0",
     "tsx": "^4.19.4",
