@@ -1,4 +1,6 @@
-# PortalOne Fullstack App
+# React Fullstack App
+
+A full stack scaffold built on vite/react for frontend site and express.js based node server for backend server.
 
 ---
 
@@ -67,11 +69,6 @@ To configure the backend port and frontend proxy target, you can create or updat
 **For the Backend (`server/.env`):**
 ```env
 PORT=5050  # Optional: Set a specific starting port for the backend. Defaults to 5050.
-```
-
-**For the Frontend (`client/.env` or passed as env var for Vite):**
-```env
-VITE_API_BASE_URL=http://localhost:5050 # Set this to match your backend's starting port.
 ```
 
 ---
