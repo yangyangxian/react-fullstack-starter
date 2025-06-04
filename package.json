@@ -1,11 +1,12 @@
 {
   "private": true,
   "scripts": {
-    "start": "npm run build && node server/dist/server/src/index.js",
+    "start": "npm run build && NODE_ENV=production node server/dist/server/src/index.js",
     "build": "npm run build:client && npm run build:server",
     "build:client": "npm --prefix client run build",
     "build:server": "npm --prefix server run build",
-    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+    "build:common": "npm --prefix common run build",
+    "dev": "NODE_ENV=development concurrently \"npm run dev:server\" \"npm run dev:client\"",
     "dev:client": "npm --prefix client run dev",
     "dev:server": "npm --prefix server run dev",
     "install:server": "npm install --prefix server",

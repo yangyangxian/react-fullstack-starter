@@ -9,10 +9,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Environment variables
-.env
-.env.*
-
 # IDE/editor files
 .vscode/
 .DS_Store
@@ -35,8 +31,8 @@ server/dist/
 coverage/
 
 # Ignore local .env files
-client/.env*
-server/.env*
+client/.env.local*
+server/.env.local*
 client/package-lock.json
 client/server/package-lock.json
 package-lock.json
