@@ -8,13 +8,12 @@ const logFormat = printf(({ level, message, timestamp, stack }) => {
 });
 
 const logger = winston.createLogger({
-  level: 'info', // Default minimum level to log
+  level: 'debug', // Default minimum level to log
   format: combine(
     timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
     logFormat
   ),
   transports: [
-    // Console transport for development and testing
     new winston.transports.Console({
       level: config.envMode === 'development' ? 'debug' : 'info', // More verbose in dev
       format: combine(
