@@ -9,3 +9,5 @@ export interface HelloResponse {
 export interface HelloNameResponse {
   message: string;
 }
+
+export const hello = "hellossdadss";

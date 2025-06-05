@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { HelloResponse, HelloNameResponse } from '../../../common/apiDto/hello';
+import { HelloResponse, HelloNameResponse } from '@common/hello';
 
 function AdminPage() {
   const [hello, setHello] = useState<HelloResponse | null>(null);
@@ -10,7 +10,7 @@ function AdminPage() {
     fetch('/api/hello')
       .then(res => res.json())
       .then((data: HelloResponse) => setHello(data));
-    console.log('AdminPage mounted, fetching /api/hello');
+      console.log('AdminPage mounted, fetching /api/hello' + hello?.message);
   }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -11,7 +11,7 @@ const requestLogger = (req: Request, res: Response, next: NextFunction) => {
 
     logger.info(`${req.method} ${req.originalUrl} - ${res.statusCode} ${durationInMs.toPrecision(1)}ms`); 
     if (req.method == 'GET') {
-      logger.debug(`Params: ${JSON.stringify(req.params)} `);
+      logger.debug(`Param: ${JSON.stringify(req.params)} `);
     }
     if (req.method == 'POST') {
       logger.debug(`Body: ${JSON.stringify(req.body)} `);

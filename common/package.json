@@ -1,0 +1,17 @@
+{
+  "name": "@fullstack/common",
+  "description": "Shared types and DTOs for PortalOne projects",
+  "scripts": {
+    "build": "npm run clean && tsc -p tsconfig.json",
+    "watch": "tsc -p . --watch",
+    "clean": "tsc --build --clean"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ]
+}

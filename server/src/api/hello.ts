@@ -1,10 +1,10 @@
 import { Router } from 'express';
-import { HelloResponse, HelloNameResponse } from '../../../common/apiDto/hello';
+import { HelloResponse, HelloNameResponse } from '@common';
 
 const router = Router();
 
 router.get('/', (req, res) => {
-  const response: HelloResponse = { message: 'Hello from /api/hello!' };
+  const response: HelloResponse = { message: 'Hello from /api/hello!'};
   res.json(response);
 });
 

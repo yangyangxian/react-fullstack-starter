@@ -4,10 +4,12 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
+    "dev": "concurrently --raw \"npm --prefix ../common run watch\" \"vite\"",
+    "dev:alone": "vite",
+    "build": "npm --prefix ../common run build && vite build",
+    "build:alone": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "npm --prefix ../common run build && vite  preview"
   },
   "dependencies": {
     "react": "^19.1.0",
