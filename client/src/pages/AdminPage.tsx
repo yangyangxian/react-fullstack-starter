@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { HelloResponse, HelloNameResponse } from '@fullstack/common';
+import { getHello, getHelloName } from '../services/APIClient';
 
 function AdminPage() {
   const [hello, setHello] = useState<HelloResponse | null>(null);
@@ -7,10 +8,9 @@ function AdminPage() {
   const [userHello, setUserHello] = useState<HelloNameResponse | null>(null);
 
   useEffect(() => {
-    fetch('/api/hello')
-      .then(res => res.json())
-      .then((data: HelloResponse) => setHello(data));
-      console.log('AdminPage mounted, fetching /api/hello' + hello?.message);
+    getHello()
+      .then(data => setHello(data))
+      .catch(error => console.error('Error fetching /api/hello:', error));
   }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -20,9 +20,12 @@ function AdminPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!input) return;
-    const res = await fetch(`/api/hello/${encodeURIComponent(input)}`);
-    const data: HelloNameResponse = await res.json();
-    setUserHello(data);
+    try {
+      const data = await getHelloName(input);
+      setUserHello(data);
+    } catch (error) {
+      console.error('Error fetching /api/hello/:name', error);
+    }
   };
 
   return (

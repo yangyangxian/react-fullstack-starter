@@ -8,7 +8,7 @@
     "build:alone": "tsc -p tsconfig.json",
     "build": "npm --prefix ../common run build && tsc -p tsconfig.json",
     "dev:alone": "NODE_ENV=development tsx watch src/index.ts -w src",
-    "dev": "concurrently \"npm --prefix ../common run watch\" \"NODE_ENV=development tsx watch src/index.ts ../common/dist\""
+    "dev": "concurrently \"npm --prefix ../common run watch\" \"NODE_ENV=development tsx watch src/index.ts ../common/dist\" --names \"common-watcher,server-tsx\" --colors \"yellow.bold,cyan.bold\""
   },
   "dependencies": {
     "dotenv": "^16.5.0",
