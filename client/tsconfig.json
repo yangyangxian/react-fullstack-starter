@@ -9,9 +9,6 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "baseUrl": "./",
-    "paths": {
-      "@common/*": ["../common/dist/*"]
-    }
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist", "build"],

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { HelloResponse, HelloNameResponse } from '@common/hello';
+import { HelloResponse, HelloNameResponse } from '@fullstack/common';
 
 function AdminPage() {
   const [hello, setHello] = useState<HelloResponse | null>(null);

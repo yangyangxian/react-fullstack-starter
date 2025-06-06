@@ -2,7 +2,7 @@ import { useState } from 'react'
 import reactLogo from '../assets/react.svg'
 import viteLogo from '/vite.svg'
 import '../App.css'
-import { hello } from '@common/hello'
+import { helloTest } from '@fullstack/common'
 
 function HomePage() {
   const [count, setCount] = useState<number>(0)
@@ -20,7 +20,7 @@ function HomePage() {
       <h1>Vite + React</h1>
       <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>
-          count is {count} {hello}
+          count is {count} {helloTest}
         </button>
         <p>
           Edit <code>src/App.tsx</code> and save to test HMR

@@ -1,5 +1,6 @@
 {
   "name": "@fullstack/common",
+  "type": "module",
   "description": "Shared types and DTOs for PortalOne projects",
   "scripts": {
     "build": "npm run clean && tsc -p tsconfig.json",
@@ -13,5 +14,9 @@
   "types": "dist/index.d.ts",
   "files": [
     "dist"
-  ]
+  ],
+  "exports": {
+    ".": "./dist/index.js",
+    "./*": "./dist/*.js"
+  }
 }

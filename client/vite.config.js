@@ -5,16 +5,9 @@ import path from 'path' // Import 'path' module
 // Get the directory of the current file (client/vite.config.js)
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
-
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  resolve: {
-    alias: {
-      '@common': path.resolve(__dirname, '../common/dist'),
-    },
-    extensions: ['.ts', '.js', '.jsx', '.tsx', '.json', '.mjs'],
-  },
   server: {
     proxy: {
       // Proxy API requests starting with /api to the backend server
@@ -30,7 +23,7 @@ export default defineConfig({
       // This implicitly tells Vite to watch these paths for HMR.
       allow: [
         path.resolve('../common'),
-        path.resolve(__dirname, '.', 'src'),
+        path.resolve(__dirname, '.')
       ],
     },
   },
