@@ -34,6 +34,7 @@ await loadApiRoutes(app, __apidir).catch((error) => {
 
 let clientBuildPath = staticDistDir;
 app.use(express.static(clientBuildPath));
+logger.info(`Serving static files from ${clientBuildPath}`);
 app.get(/^\/(?!api\/).*/, (req: Request, res: Response) => {
   res.sendFile(path.join(clientBuildPath, 'index.html'));
 });

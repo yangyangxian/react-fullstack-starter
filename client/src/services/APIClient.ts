@@ -1,7 +1,12 @@
 import { HelloResponse, HelloNameResponse } from '@fullstack/common';
 
-// The fallback is the default production port of backend. when running start locally, the static frontend file will use fallback.
-const API_BASE_URL: string = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5050';
+let API_BASE_URL: string;
+
+if (import.meta.env.MODE === 'development') {
+  API_BASE_URL = '';
+} else {
+  API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
+}
 
 export async function getHello(): Promise<HelloResponse> {
   const response = await fetch(`${API_BASE_URL}/api/hello`);
