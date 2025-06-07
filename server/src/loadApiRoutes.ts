@@ -1,9 +1,11 @@
 import { Express } from 'express';
 import path from 'path';
 import fs from 'fs';
+import { pathToFileURL } from 'url';
+import logger from './utils/logger.js';
 
-export async function loadApiRoutes(app: Express, __dirname: string) {
-  const apiDir = path.join(__dirname, 'api');
+export async function loadApiRoutes(app: Express, apiDir: string) {
+  logger.info(`Loading api routes, the api directory is ${apiDir}`);
   const files = fs.readdirSync(apiDir);
   for (const file of files) {
     // Only include .ts or .js files, skip .d.ts and hidden files
@@ -16,7 +18,8 @@ export async function loadApiRoutes(app: Express, __dirname: string) {
       if (!routeName) continue; // skip if filename is empty
       const routePath = `/api/${routeName}`;
       const modulePath = path.join(apiDir, file);
-      const routerModule = await import(modulePath);
+      const moduleUrl = pathToFileURL(modulePath).href;
+      const routerModule = await import(moduleUrl);
       const router = routerModule.default;
       app.use(routePath, router);
     }

@@ -7,7 +7,7 @@
     "common"
   ],
   "scripts": {
-    "start": "npm run build && NODE_ENV=production node server/dist/server/src/index.js",
+    "start": "npm run build && cross-env NODE_ENV=production node server/dist/index.js",
     "build": "npm run build:common && npm run build:client && npm run build:server",
     "build:client": "npm --prefix client run build:alone",
     "build:server": "npm --prefix server run build:alone",
@@ -20,6 +20,7 @@
     "install:all": "npm install --prefix server && npm install --prefix client && npm install"
   },
   "dependencies": {
-    "concurrently": "^9.1.2"
+    "concurrently": "^9.1.2",
+    "cross-env": "^7.0.3"
   }
 }

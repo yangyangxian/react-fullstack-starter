@@ -6,10 +6,10 @@
   "scripts": {
     "dev": "concurrently --raw \"npm --prefix ../common run watch\" \"vite\"",
     "dev:alone": "vite",
-    "build": "npm --prefix ../common run build && vite build",
-    "build:alone": "vite build",
+    "build": "npm --prefix ../common run build && npm run build:alone",
+    "build:alone": "cross-env NODE_ENV=production vite build",
     "lint": "eslint .",
-    "preview": "npm --prefix ../common run build && vite  preview"
+    "preview": "npm --prefix ../common run build && vite preview"
   },
   "dependencies": {
     "react": "^19.1.0",

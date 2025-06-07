@@ -10,4 +10,4 @@ export interface HelloNameResponse {
   message: string;
 }
 
-export const helloTest = "hellossss";
+export const helloTest = "hesdllosddsss";
