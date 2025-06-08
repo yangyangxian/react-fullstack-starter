@@ -4,14 +4,17 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "concurrently --raw \"npm --prefix ../common run watch\" \"vite\"",
-    "dev:alone": "cross-env NODE_ENV=development vite",
+    "dev": "concurrently --raw \"npm --prefix ../common run watch\" \"npm run dev:alone\"",
+    "dev:alone": "vite",
     "build": "npm --prefix ../common run build && npm run build:alone",
     "build:alone": "cross-env NODE_ENV=production vite build",
     "lint": "eslint .",
-    "preview": "npm --prefix ../common run build && vite preview"
+    "preview": "npm --prefix ../common run build && vite preview",
+    "shutdown": "echo 'Gracefully shutting down...'"
   },
   "dependencies": {
+    "concurrently": "^9.1.2",
+    "cross-env": "^7.0.3",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-router-dom": "^7.6.0"

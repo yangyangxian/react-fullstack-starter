@@ -4,7 +4,7 @@
   "description": "Shared types and DTOs for PortalOne projects",
   "scripts": {
     "build": "npm run clean && tsc -p tsconfig.json",
-    "watch": "tsc -p . --watch",
+    "watch": "tsc -p ./ --watch",
     "clean": "tsc --build --clean"
   },
   "devDependencies": {

@@ -2,11 +2,12 @@ import { HelloResponse, HelloNameResponse } from '@fullstack/common';
 
 let API_BASE_URL: string;
 
-if (import.meta.env.MODE === 'development') {
-  API_BASE_URL = '';
+if (import.meta.env.MODE === 'production') {
+  API_BASE_URL = import.meta.env.VITE_API_BASE_URL || ''; 
 } else {
-  API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
+  API_BASE_URL = '';
 }
+console.log("API_BASE_URL:" + API_BASE_URL);
 
 export async function getHello(): Promise<HelloResponse> {
   const response = await fetch(`${API_BASE_URL}/api/hello`);

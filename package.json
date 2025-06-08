@@ -12,9 +12,10 @@
     "build:client": "npm --prefix client run build:alone",
     "build:server": "npm --prefix server run build:alone",
     "build:common": "npm --prefix common run build",
-    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\" --names server,client --colors bgBlue.bold,bgMagenta.bold",
+    "dev": "concurrently --raw \"npm run dev:common\" \"npm run dev:server\" \"npm run dev:client\" ",
     "dev:client": "npm --prefix client run dev:alone",
     "dev:server": "npm --prefix server run dev",
+    "dev:common": "npm --prefix common run watch",
     "install:server": "npm install --prefix server",
     "install:client": "npm install --prefix client",
     "install:all": "npm install --prefix server && npm install --prefix client && npm install"
