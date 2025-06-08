@@ -1,19 +1,18 @@
 import express, { Request, Response } from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { loadApiRoutes } from './loadApiRoutes.js';
 import fs from 'fs';
 import { Server } from 'http';
 import configs from './config.js'; 
 import logger from './utils/logger.js';
+import { loadApiRoutes } from './loadApiRoutes.js';
 import requestLogger from './middleware/requestLogger.js';
+import { serverRootDir, staticDistDir } from './utils/path.js';
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 const PORT: number = configs.port;
 
 const app = express();
-
 // ********************************************************
 // Load Middleware
 // ********************************************************
@@ -22,7 +21,8 @@ app.use(requestLogger);
 // ********************************************************
 // Register API routes
 // ********************************************************
-await loadApiRoutes(app, __dirname).catch((error) => {
+const __apidir = path.resolve(serverRootDir, "./api");
+await loadApiRoutes(app, __apidir).catch((error) => {
   logger.error('Error registering API routes:', error);
   process.exit(1);
 });
@@ -31,15 +31,13 @@ await loadApiRoutes(app, __dirname).catch((error) => {
 // Serve static files from the client build directory 
 // For testing production mode locally
 // ********************************************************
-let clientBuildPath = path.resolve(__dirname, '../../client/dist');
-if (!fs.existsSync(path.join(clientBuildPath, 'index.html'))) {
-  clientBuildPath = path.resolve(__dirname, '../../../../client/dist');
-}
+
+let clientBuildPath = staticDistDir;
 app.use(express.static(clientBuildPath));
+logger.info(`Serving static files from ${clientBuildPath}`);
 app.get(/^\/(?!api\/).*/, (req: Request, res: Response) => {
   res.sendFile(path.join(clientBuildPath, 'index.html'));
 });
-
 
 // ********************************************************
 // Start the server

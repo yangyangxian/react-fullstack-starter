@@ -7,19 +7,21 @@
     "common"
   ],
   "scripts": {
-    "start": "npm run build && NODE_ENV=production node server/dist/server/src/index.js",
+    "start": "npm run build && cross-env NODE_ENV=production node server/dist/index.js",
     "build": "npm run build:common && npm run build:client && npm run build:server",
     "build:client": "npm --prefix client run build:alone",
     "build:server": "npm --prefix server run build:alone",
     "build:common": "npm --prefix common run build",
-    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\" --names server,client --colors bgBlue.bold,bgMagenta.bold",
+    "dev": "concurrently --raw \"npm run dev:common\" \"npm run dev:server\" \"npm run dev:client\" ",
     "dev:client": "npm --prefix client run dev:alone",
     "dev:server": "npm --prefix server run dev",
+    "dev:common": "npm --prefix common run watch",
     "install:server": "npm install --prefix server",
     "install:client": "npm install --prefix client",
     "install:all": "npm install --prefix server && npm install --prefix client && npm install"
   },
   "dependencies": {
-    "concurrently": "^9.1.2"
+    "concurrently": "^9.1.2",
+    "cross-env": "^7.0.3"
   }
 }

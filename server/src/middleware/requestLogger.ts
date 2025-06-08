@@ -9,13 +9,14 @@ const requestLogger = (req: Request, res: Response, next: NextFunction) => {
     const end = hrtime.bigint();
     const durationInMs = Number((end - start) / BigInt(1000000)); 
 
-    logger.info(`${req.method} ${req.originalUrl} - ${res.statusCode} ${durationInMs.toPrecision(1)}ms`); 
+    let requestLog = `${req.method} ${req.originalUrl} | Status Code: ${res.statusCode} | ${durationInMs.toPrecision(1)} ms `;
     if (req.method == 'GET') {
-      logger.debug(`Param: ${JSON.stringify(req.params)} `);
+      requestLog = requestLog + `| Param: ${JSON.stringify(req.params)} `;
     }
     if (req.method == 'POST') {
-      logger.debug(`Body: ${JSON.stringify(req.body)} `);
+      requestLog = requestLog + `| Body: ${JSON.stringify(req.body)} `;
     }
+    logger.info(requestLog); 
   });
 
   next();

@@ -22,6 +22,7 @@ export default defineConfig({
       // Allow Vite to access files from the common/dist directory.
       // This implicitly tells Vite to watch these paths for HMR.
       allow: [
+        '..',
         path.resolve('../common'),
         path.resolve(__dirname, '.')
       ],
