@@ -1,5 +1,6 @@
 import winston from 'winston';
 import config from '../config.js';
+import { serverRootDir } from './path.js';
 
 const { combine, timestamp, printf, colorize } = winston.format;
 
@@ -23,17 +24,17 @@ const logger = winston.createLogger({
     }),
   ],
   exceptionHandlers: [
-    new winston.transports.File({ filename: 'logs/exceptions.log' })
+    new winston.transports.File({ filename: `${serverRootDir}/logs/exceptions.log` })
   ],
   rejectionHandlers: [
-    new winston.transports.File({ filename: 'logs/rejections.log' })
+    new winston.transports.File({ filename: `${serverRootDir}/logs/rejections.log` })
   ]
 });
 
 // Add file transport only in production
 if (config.envMode === 'production') {
-  logger.add(new winston.transports.File({ filename: 'logs/error.log', level: 'error' }));
-  logger.add(new winston.transports.File({ filename: 'logs/combined.log' }));
+  logger.add(new winston.transports.File({ filename: `${serverRootDir}/logs/error.log`, level: 'error' }));
+  logger.add(new winston.transports.File({ filename: `${serverRootDir}/logs/combined.log` }));
 }
 
 // Suppress console logs in test environment (winston automatically handles this via level)
@@ -43,4 +44,4 @@ if (config.envMode === 'test') {
   // This is handled by the initial `if (config.env === 'production')` block
 }
 
-export default logger; 
+export default logger;
