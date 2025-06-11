@@ -12,7 +12,7 @@
     "build:client": "npm --prefix client run build:alone",
     "build:server": "npm --prefix server run build:alone",
     "build:common": "npm --prefix common run build",
-    "dev": "concurrently --names \"COMMON,SERVER,CLIENT\" --prefix-colors 'yellow,blue,green' --kill-others \"npm run dev:common\" \"npm run dev:server\" \"npm run dev:client\" ",
+    "dev": "concurrently --names \"COMMON,CLIENT,SERVER\" --prefix-colors \"yellow,green,blue\" --kill-others  \"npm run dev:common\" \"npm run dev:client\" \"npm run dev:server\"",
     "dev:client": "npm --prefix client run dev:alone",
     "dev:server": "npm --prefix server run dev:alone",
     "dev:common": "npm --prefix common run watch",
