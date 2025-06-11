@@ -1,12 +1,26 @@
-# React + Vite
+# React + Vite Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the frontend for the React Fullstack App, built with Vite and React.
 
-Currently, two official plugins are available:
+## Scripts
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- `npm run dev` – Start the frontend in development mode with hot reload. Proxies API requests to the backend.
+- `npm run build` – Build the production-ready static files to `dist/`.
+- `npm run preview` – Preview the production build locally.
 
-## Expanding the ESLint configuration
+## Development
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- The frontend uses TypeScript and React Router.
+- API requests to `/api` are proxied to the backend server (see `vite.config.js`).
+- Shared types are imported from the `common` package.
+
+## Project Structure
+
+- `src/` – Main source code (pages, services, assets)
+- `public/` – Static public assets
+- `dist/` – Production build output
+
+## Notes
+
+- Ensure the `common` package is built before starting the frontend in development or production.
+- For fullstack development, use the root `npm run dev` script to run both client and server with hot reload.
