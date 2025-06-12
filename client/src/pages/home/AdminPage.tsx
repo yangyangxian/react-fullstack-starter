@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { HelloResponse, HelloNameResponse } from '@fullstack/common';
-import { getHello, getHelloName } from '../services/APIClient';
+import { getHello, getHelloName } from '../../services/APIClient';
 
 function AdminPage() {
   const [hello, setHello] = useState<HelloResponse | null>(null);
@@ -9,8 +9,8 @@ function AdminPage() {
 
   useEffect(() => {
     getHello()
-      .then(data => setHello(data))
-      .catch(error => console.error('Error fetching /api/hello:', error));
+      .then((data: HelloResponse) => setHello(data))
+      .catch((error: unknown) => console.error('Error fetching /api/hello:', error));
   }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -21,9 +21,9 @@ function AdminPage() {
     e.preventDefault();
     if (!input) return;
     try {
-      const data = await getHelloName(input);
+      const data: HelloNameResponse = await getHelloName(input);
       setUserHello(data);
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Error fetching /api/hello/:name', error);
     }
   };

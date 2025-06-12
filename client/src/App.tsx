@@ -1,23 +1,21 @@
-import { Routes, Route } from 'react-router-dom';
-import HomePage from './pages/HomePage';
-import AdminPage from './pages/AdminPage';
-import { NavLink } from 'react-router-dom';
+import { useRoutes, RouteObject } from 'react-router-dom';
+import { getDynamicRoutes } from './utils/dynamicRoutes';
+import NotFoundPage from './pages/NotFoundPage';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
-  return (
-    <div>
-      <nav className="navbar">
-        <NavLink to="/" className={({ isActive }) => "navbar-link" + (isActive ? " active" : "")}>Home</NavLink>
-        <NavLink to="/admin" className={({ isActive }) => "navbar-link" + (isActive ? " active" : "")}>Admin</NavLink>
-      </nav>
-      <div className="app-content">
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/admin" element={<AdminPage />} />
-        </Routes>
-      </div>
-    </div>
-  );
+  const routes = getDynamicRoutes();
+  const processedRoutes = routes.map(route => ({
+    ...route,
+    element: <ProtectedRoute>{route.element}</ProtectedRoute>,
+  }));
+
+  const hasWildcard = processedRoutes.some(r => r.path === '*');
+  if (!hasWildcard) {
+    processedRoutes.push({ path: '*', element: <NotFoundPage /> });
+  }
+
+  return useRoutes(processedRoutes);
 }
 
 export default App;
