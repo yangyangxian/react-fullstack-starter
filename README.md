@@ -7,6 +7,7 @@ A full stack scaffold built on Vite/React for the frontend and Express.js/Node f
 ## ✨ New Features
 
 - **Directory-Based API Routing**: API routes are automatically discovered and loaded from files within the `server/src/api/` directory (e.g., `hello.ts` for `/api/hello`).
+- **Client-Side Dynamic Routing**: The frontend features a dynamic routing system that automatically generates routes from `.tsx` files in `client/src/pages`. This includes support for nested routes, route grouping with `(folder)` syntax, and automatic protection of routes.
 - **Shared Types**: The `common/` package provides shared types and DTOs for both client and server.
 
 ---
