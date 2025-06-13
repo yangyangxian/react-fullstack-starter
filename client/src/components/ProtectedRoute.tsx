@@ -1,21 +1,26 @@
 import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import { getAuthContext } from '../hooks/useAuthProvider';
+import { useAuth } from '../providers/AuthProvider';
+import { publicRoutes, LOGIN_PATH, SIGNUP_PATH, HOME_PATH } from '../config/routeConfig';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-  const { isAuthenticated } = getAuthContext();
+  const { isAuthenticated } = useAuth();
   const location = useLocation();
 
-  if (isAuthenticated && location.pathname === '/login') {
-    return <Navigate to="/home" replace />;
+  const isPublicRoute = publicRoutes.includes(location.pathname);
+
+  // If user is authenticated and tries to access login or signup page, redirect to home
+  if (isAuthenticated && (location.pathname === LOGIN_PATH || location.pathname === SIGNUP_PATH)) {
+    return <Navigate to={HOME_PATH} replace />;
   }
 
-  if (!isAuthenticated && location.pathname !== '/login') {
-    return <Navigate to="/login" state={{ from: location }} replace />;
+  // If user is not authenticated and trying to access a protected route, redirect to login
+  if (!isAuthenticated && !isPublicRoute) {
+    return <Navigate to={LOGIN_PATH} state={{ from: location }} replace />;
   }
 
   return <>{children}</>;

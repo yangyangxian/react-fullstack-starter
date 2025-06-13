@@ -1,10 +1,10 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getAuthContext } from '../../hooks/useAuthProvider';
+import { useAuth } from '../../providers/AuthProvider';
 
 function LoginPage() {
   const navigate = useNavigate();
-  const { login } = getAuthContext();
+  const { login } = useAuth();
   
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();

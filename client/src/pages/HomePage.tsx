@@ -1,19 +1,26 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet, Navigate, useLocation } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
-import { getAuthContext } from '../hooks/useAuthProvider';
+import { useAuth } from '../providers/AuthProvider';
 
 function HomePage() {
-  const { logout } = getAuthContext();
+  const { logout } = useAuth(); // Now using the interface-based hook
+  const location = useLocation();
 
   const handleLogout = () => {
     logout();
   };
+  // If we're at exactly / or /home (no child route), redirect to the first nested route
+  if (location.pathname === '/' || location.pathname === '/home' || location.pathname === '/home/') {
+    return <Navigate to="/home/nestedroutesguide" replace />;
+  }
 
   return (
     <div style={{
       minHeight: '100vh',
-      background: 'linear-gradient(120deg, #f0f4f8 0%, #e0e7ef 100%)',
+      background: 'linear-gradient(120deg, #f0fdf4 0%, #fce7f3 100%)', // Updated to green-to-pink gradient
       fontFamily: 'Segoe UI, Arial, sans-serif',
+      display: 'flex',
+      flexDirection: 'column',
     }}>
       {/* Fixed top navigation bar */}
       <nav style={{
@@ -32,27 +39,27 @@ function HomePage() {
       }}>
         <div style={{ display: 'flex', gap: 24 }}>
           <NavLink
-            to="/home/test"
+            to="/home/nestedroutesguide"
             style={({ isActive }) => ({
               padding: '10px 28px',
               borderRadius: 8,
-              background: isActive ? 'linear-gradient(90deg, #60a5fa 0%, #2563eb 100%)' : 'transparent',
+              background: isActive ? 'linear-gradient(90deg, #059669 0%, #047857 100%)' : 'transparent', // Updated to green gradient
               color: isActive ? '#fff' : '#334155',
               fontWeight: 600,
               fontSize: 18,
               textDecoration: 'none',
-              boxShadow: isActive ? '0 2px 8px rgba(37,99,235,0.10)' : 'none',
+              boxShadow: isActive ? '0 2px 8px rgba(5,150,105,0.10)' : 'none', // Updated shadow color
               transition: 'all 0.2s',
             })}
           >
-            Test
+            Nested Routes Guide
           </NavLink>
           <NavLink
-            to="/home/admin"
+            to="/home/apidataexample"
             style={({ isActive }) => ({
               padding: '10px 28px',
               borderRadius: 8,
-              background: isActive ? 'linear-gradient(90deg, #f472b6 0%, #be185d 100%)' : 'transparent',
+              background: isActive ? 'linear-gradient(90deg, #f472b6 0%, #be185d 100%)' : 'transparent', // Keep pink gradient
               color: isActive ? '#fff' : '#334155',
               fontWeight: 600,
               fontSize: 18,
@@ -61,7 +68,7 @@ function HomePage() {
               transition: 'all 0.2s',
             })}
           >
-            Admin
+            API Data Example
           </NavLink>
         </div>
         
@@ -71,7 +78,7 @@ function HomePage() {
             onClick={handleLogout}
             style={{
               padding: '8px 16px',
-              background: '#ef4444',
+              background: '#f472b6', // Changed to pink
               color: '#fff',
               border: 'none',
               borderRadius: 6,
@@ -80,8 +87,8 @@ function HomePage() {
               cursor: 'pointer',
               transition: 'background 0.2s'
             }}
-            onMouseOver={e => (e.currentTarget.style.background = '#dc2626')}
-            onMouseOut={e => (e.currentTarget.style.background = '#ef4444')}
+            onMouseOver={e => (e.currentTarget.style.background = '#be185d')} // Darker pink on hover
+            onMouseOut={e => (e.currentTarget.style.background = '#f472b6')}
           >
             Logout
           </button>
@@ -92,43 +99,15 @@ function HomePage() {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'center',
-        minHeight: '100vh',
-        paddingTop: 96, // space for navbar
+        paddingTop: 64, // Adjusted to remove extra padding, just space for navbar
+        flexGrow: 1,
+        width: '100%',
+        boxSizing: 'border-box',
+        overflowY: 'auto',
       }}>
-        <div style={{
-          background: '#fff',
-          borderRadius: 16,
-          boxShadow: '0 4px 24px rgba(0,0,0,0.08)',
-          padding: '40px 48px',
-          minWidth: 380,
-          maxWidth: 520,
-          width: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}>
-          <h1 style={{
-            fontSize: '2.5rem',
-            fontWeight: 800,
-            color: '#1e293b',
-            marginBottom: 12,
-            letterSpacing: 0.5,
-          }}>
-            Welcome Home!
-          </h1>
-          <p style={{
-            color: '#64748b',
-            fontSize: '1.1rem',
-            marginBottom: 32,
-            textAlign: 'center',
-            maxWidth: 400,
-          }}>
-            This is your dashboard. Use the navigation above to explore features and manage your work.
-          </p>
-          <div style={{ width: '100%' }}>
-            <Outlet />
-          </div>
+        {/* Removed the paper effect container and "Welcome Home!" heading */}
+        <div style={{ width: '100%', flexGrow: 1, display: 'flex', flexDirection: 'column' }}> 
+          <Outlet />
         </div>
       </div>
     </div>
