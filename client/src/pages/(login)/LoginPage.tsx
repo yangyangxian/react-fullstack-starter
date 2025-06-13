@@ -12,14 +12,30 @@ function LoginPage() {
     navigate('/');
   };
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#f8fafc', fontFamily: 'Arial, sans-serif' }}>
-      <h2 style={{ fontSize: '2rem', fontWeight: 700, marginBottom: '1.5rem', color: '#222d3b' }}>Log In</h2>
-      <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '1rem', minWidth: 300 }}>
-        <input type="email" placeholder="Email" required style={{ padding: '0.75rem', borderRadius: 6, border: '1px solid #cbd5e1', fontSize: '1rem' }} />
-        <input type="password" placeholder="Password" required style={{ padding: '0.75rem', borderRadius: 6, border: '1px solid #cbd5e1', fontSize: '1rem' }} />
-        <button type="submit" style={{ padding: '0.75rem', background: '#2563eb', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 600, fontSize: '1rem', cursor: 'pointer' }}>Log In</button>
-      </form>
-      <button onClick={() => navigate('/signup')} style={{ marginTop: '1rem', background: 'none', border: 'none', color: '#2563eb', cursor: 'pointer', fontSize: '1rem' }}>Don't have an account? Sign Up</button>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50 font-sans">
+      <div className="p-8 bg-white shadow-xl rounded-lg w-full max-w-sm">
+        <h2 className="text-3xl font-bold mb-6 text-slate-800 text-center">Log In</h2>
+        <form onSubmit={handleLogin} className="flex flex-col gap-4">
+          <input type="email" placeholder="Email" required 
+            className="p-3 rounded-md border border-slate-300 text-base focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none" 
+          />
+          <input type="password" placeholder="Password" required 
+            className="p-3 rounded-md border border-slate-300 text-base focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none" 
+          />
+          <button 
+            type="submit" 
+            className="p-3 bg-green-600 text-white border-none rounded-lg font-semibold text-base cursor-pointer hover:bg-green-700 transition-colors"
+          >
+            Log In
+          </button>
+        </form>
+        <button 
+          onClick={() => navigate('/signup')} 
+          className="mt-6 bg-transparent border-none text-green-600 cursor-pointer text-base hover:underline w-full text-center"
+        >
+          Don't have an account? Sign Up
+        </button>
+      </div>
     </div>
   );
 }

@@ -29,96 +29,43 @@ function APIDataExamplePage() {
   };
 
   return (
-    <div style={{
-      padding: '2rem',
-      background: '#ffffff',
-      borderRadius: '8px',
-      boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-      textAlign: 'center',
-      maxWidth: '600px',
-      margin: '2rem auto'
-    }}>
-      <h2 style={{
-        color: '#f472b6', // Changed to pink
-        marginBottom: '1.5rem',
-        fontSize: '2rem',
-        fontWeight: 700,
-      }}>
+    <div className="p-8 bg-white rounded-lg shadow-lg text-center max-w-2xl mx-auto my-8">
+      <h2 className="text-pink-500 mb-6 text-3xl font-bold">
         Backend API Data Example
       </h2>
-      <p style={{
-        color: '#4b5563', // Keep neutral gray for readability
-        marginBottom: '1rem',
-        fontSize: '1.1rem',
-      }}>
+      <p className="text-gray-600 mb-4 text-lg">
         This page demonstrates how to fetch and display data from the backend API.
       </p>
-      <div style={{
-        marginTop: '2rem',
-        padding: '1rem',
-        background: '#fce7f3', // Changed to light pink
-        borderRadius: '6px',
-        border: '1px solid #f9a8d4', // Changed to pink border
-      }}>
-        <h3 style={{
-          color: '#f472b6', // Changed to pink
-          marginBottom: '0.5rem',
-          fontSize: '1.25rem',
-        }}>
+      {/* Simplified the nested container: removed its own background, padding, and shadow. It now just provides margin. */}
+      <div className="mt-8"> 
+        <h3 className="text-pink-500 mb-4 text-2xl font-semibold">
           API Data Example
         </h3>
-        <p style={{ color: '#4b5563', marginBottom: '0.5rem' }}>
+        <p className="text-gray-700 mb-4">
           <strong><code>/api/hello</code>:</strong> {hello ? hello.message : 'Loading...'}
         </p>
-        <form onSubmit={handleSubmit} style={{
-          display: 'flex',
-          gap: '0.5rem',
-          justifyContent: 'center',
-          alignItems: 'center',
-          marginTop: '1rem',
-        }}>
+        <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 justify-center items-center mt-6">
           <input
             type="text"
             value={input}
             onChange={handleInputChange}
             placeholder="Enter a name"
-            style={{
-              padding: '0.5rem 0.75rem',
-              fontSize: '1rem',
-              border: '1px solid #f9a8d4', // Changed to pink border
-              borderRadius: '4px',
-              outline: 'none',
-              flexGrow: 1,
-              maxWidth: '250px',
-            }}
+            className="p-3 text-base border border-gray-300 rounded-lg outline-none w-full sm:w-auto flex-grow sm:flex-grow-0 sm:max-w-xs focus:border-pink-500 focus:ring-1 focus:ring-pink-500 transition-colors duration-150"
           />
-          <button type="submit" style={{
-            padding: '0.5rem 1rem',
-            fontSize: '1rem',
-            background: 'linear-gradient(90deg, #f472b6 0%, #be185d 100%)', // Changed to pink gradient
-            color: '#fff',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            transition: 'opacity 0.2s',
-          }}
-          onMouseOver={e => (e.currentTarget.style.opacity = '0.9')}
-          onMouseOut={e => (e.currentTarget.style.opacity = '1')}
+          <button
+            type="submit"
+            className="p-3 text-base bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white border-none rounded-lg cursor-pointer transition-all duration-200 w-full sm:w-auto shadow-md hover:shadow-lg"
           >
             Greet
           </button>
         </form>
         {userHello && (
-          <p style={{ color: '#4b5563', marginTop: '1rem' }}>
+          <p className="text-gray-700 mt-4">
             <strong><code>/api/hello/:name</code>:</strong> {userHello.message}
           </p>
         )}
       </div>
-      <p style={{
-        marginTop: '2rem',
-        color: '#6b7280',
-        fontSize: '0.9rem',
-      }}>
+      <p className="mt-8 text-gray-500 text-sm">
         This page showcases fetching data from <code>/api/hello</code> and <code>/api/hello/:name</code>.
       </p>
     </div>

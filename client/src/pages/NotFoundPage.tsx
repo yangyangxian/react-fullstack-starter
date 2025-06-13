@@ -1,20 +1,10 @@
-
 function NotFoundPage() {
   return (
-    <div style={{
-      minHeight: '100vh',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      background: '#f5f5f5',
-      fontFamily: 'Arial, sans-serif',
-      color: '#222d3b',
-    }}>
-      <h1 style={{ fontSize: '3rem', fontWeight: 700, marginBottom: '1.5rem' }}>404 - Page Not Found</h1>
-      <p style={{ fontSize: '1.2rem', color: '#334155', marginBottom: '2rem', maxWidth: 500, textAlign: 'center' }}>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-slate-100 font-sans text-slate-800">
+      <h1 className="text-5xl font-bold mb-6">404 - Page Not Found</h1>
+      <p className="text-lg text-slate-700 mb-8 max-w-md text-center">
         Sorry, the page you are looking for does not exist.<br />
-        Please check the URL or return to the <a href="/">home page</a>.
+        Please check the URL or return to the <a href="/" className="text-blue-600 hover:underline">home page</a>.
       </p>
     </div>
   );
