@@ -1,4 +1,4 @@
-import winston from 'winston';
+import winston, { Logger } from 'winston';
 import config from '../config.js';
 import { serverRootDir } from './path.js';
 
@@ -8,7 +8,7 @@ const logFormat = printf(({ level, message, timestamp, stack }) => {
   return `${timestamp} ${level}: ${message}${stack ? `\n${stack}` : ''}`;
 });
 
-const logger = winston.createLogger({
+const logger : Logger = winston.createLogger({
   level: 'debug', // Default minimum level to log
   format: combine(
     timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),

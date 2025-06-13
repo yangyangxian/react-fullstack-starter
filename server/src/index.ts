@@ -1,7 +1,6 @@
 import express, { Request, Response } from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import fs from 'fs';
 import { Server } from 'http';
 import configs from './config.js'; 
 import logger from './utils/logger.js';
