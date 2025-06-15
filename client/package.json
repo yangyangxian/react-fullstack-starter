@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "concurrently --raw \"npm --prefix ../common run watch\" \"npm run dev:alone\"",
+    "dev": "concurrently \"npm --prefix ../common run watch\" \"npm run dev:alone\"",
     "dev:alone": "vite",
     "build": "npm --prefix ../common run build && npm run build:alone",
     "build:alone": "cross-env NODE_ENV=production vite build",
