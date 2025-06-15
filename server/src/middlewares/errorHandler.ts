@@ -1,27 +1,44 @@
 import { Request, Response, NextFunction } from 'express';
 import logger from '../utils/logger.js';
-import { ApiErrorResponse } from '@fullstack/common';
+import { ApiErrorResponse, ApiResponse } from '@fullstack/common';
+import { CustomError } from '../classes/CustomError.js';
+import configs from 'src/config.js';
+import { createApiResponse } from '../utils/apiResponseUtils.js';
 
-const errorHandler = (error: Error, req: Request, res: Response, next: NextFunction) => {
+const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
   if (res.headersSent) {
-    return next(error);
+    return next(err);
   }
-  
-  // Don't send error details in production
-  const isDevelopment = process.env.NODE_ENV === 'development';
-  
+
+  const isDevelopment = configs.envMode == 'development';
+  let statusCode = 422; // Default status code for errors
+  let errorName = 'InternalServerError';
+  let errorMessage = 'An unexpected error occurred.';
+  let errorStack = err.stack;
+
+  if (err instanceof CustomError) {
+    errorName = err.name;
+    errorMessage = err.message;
+  } else {
+    // For generic errors, keep original name and message if available
+    statusCode = 500; //This is a server error which is not handled by the application
+    errorName = err.name || errorName;
+    errorMessage = err.message || errorMessage;
+  }
+
   const apiErrorResponse: ApiErrorResponse = {
-    name: error.name || 'Error',
-    message: error.message || 'Internal server error',
-    timestamp: new Date().toISOString(),
-    ...(isDevelopment && { stack: error.stack })
+    name: errorName,
+    message: errorMessage,
+    timestamp: (err instanceof CustomError) ? err.timestamp : new Date().toISOString(),
+    ...(isDevelopment && { stack: errorStack }),
   };
-  
-  // Log the structured error response with better formatting
-  logger.error(`API Error Response:\n${JSON.stringify(apiErrorResponse, null, 2)}`);
-  
-  // Send formatted JSON response (Express will handle pretty-printing in development)
-  res.status(500).json(apiErrorResponse);
+
+  let errorLog = isDevelopment ? `API Error(status code:${statusCode}): ${apiErrorResponse.stack}` 
+    : `API Error(status code:${statusCode}): ${apiErrorResponse.name} | ${apiErrorResponse.message}`;
+  logger.error(errorLog);
+
+  const finalResponse = createApiResponse<null>(false, null, apiErrorResponse);
+  res.status(statusCode).json(finalResponse);
 };
 
 export default errorHandler;

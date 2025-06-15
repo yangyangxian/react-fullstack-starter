@@ -2,10 +2,8 @@ import { Express } from 'express';
 import path from 'path';
 import fs from 'fs';
 import { pathToFileURL } from 'url';
-import logger from './utils/logger.js';
 
 export async function loadApiRoutes(app: Express, apiDir: string) {
-  logger.info(`Loading api routes, the api directory is ${apiDir}`);
   const files = fs.readdirSync(apiDir);
   for (const file of files) {
     // Only include .ts or .js files, skip .d.ts and hidden files

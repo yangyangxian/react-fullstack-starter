@@ -36,3 +36,4 @@ server/.env.local*
 client/package-lock.json
 client/server/package-lock.json
 package-lock.json
+server/.env.development

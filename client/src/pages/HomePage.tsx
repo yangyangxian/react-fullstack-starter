@@ -23,7 +23,7 @@ function HomePage() {
           <NavLink
             to="/home/nestedroutesguide"
             className={({ isActive }) => {
-              const commonClasses = "py-2.5 px-7 rounded-lg font-semibold text-lg no-underline transition-colors duration-200 ease-in-out";
+              const commonClasses = "py-2 px-6 rounded-lg font-semibold text-lg no-underline transition-colors duration-200 ease-in-out";
               if (isActive) {
                 return `${commonClasses} bg-green-600 text-white`;
               }
@@ -35,7 +35,7 @@ function HomePage() {
           <NavLink
             to="/home/apidataexample"
             className={({ isActive }) => {
-              const commonClasses = "py-2.5 px-7 rounded-lg font-semibold text-lg no-underline transition-colors duration-200 ease-in-out";
+              const commonClasses = "py-2 px-6 rounded-lg font-semibold text-lg no-underline transition-colors duration-200 ease-in-out";
               if (isActive) {
                 return `${commonClasses} bg-pink-500 text-white`;
               }
