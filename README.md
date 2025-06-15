@@ -19,6 +19,27 @@ A full stack scaffold built on Vite/React for the frontend and Express.js/Node f
 
 ---
 
+## ⚙️ Technology Stack
+
+- **Frontend**:
+  - React
+  - Vite
+  - TypeScript
+  - Tailwind CSS (Assumed, as it's common with Vite/React and often requested)
+- **Backend**:
+  - Node.js
+  - Express.js
+  - TypeScript
+  - Drizzle ORM (for database interaction)
+  - Winston
+- **Shared Code**:
+  - TypeScript (in the `common/` package for DTOs and shared logic)
+- **Build & Package Management**:
+  - npm
+  - Vite (for frontend bundling and development server)
+
+---
+
 ## How to Run
 
 1. **Install dependencies (first time only):**
@@ -88,12 +109,15 @@ A full stack scaffold built on Vite/React for the frontend and Express.js/Node f
 For backend configuration, such as port numbers and database connection strings, this project uses `.env` files located in the `server/` directory.
 
 **Managing Sensitive Data (e.g., `DATABASE_URL`):**
+
 - Create a `server/.env.development` (for development) or `server/.env.production` (for production) file for your environment-specific settings. These files will contain your actual `DATABASE_URL` and other sensitive information.
 - **Crucially, ensure these environment-specific files (e.g., `server/.env.development`, `server/.env.production` if they contain secrets) are listed in your `.gitignore` file to prevent committing secrets.**
 - The `server/.env` file should be used for base configuration, default values, or as a template. It can be committed to version control if it does **not** contain any secrets.
 
 **Loading Order:**
+
 The application loads environment variables in the following order:
+
 1. **`server/.env`**: This file is loaded first and should contain your base configuration or default values.
 2. **`server/.env.development` OR `server/.env.production`**: Depending on the `NODE_ENV` (e.g., 'development' or 'production'), the corresponding file is loaded next. Variables in these files will override any identical variables defined in `server/.env`.
 
