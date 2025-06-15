@@ -4,14 +4,15 @@ import { fileURLToPath } from 'url';
 import { Server } from 'http';
 import configs from './config.js'; 
 import logger from './utils/logger.js';
-import { loadApiRoutes } from './loadApiRoutes.js';
-import requestLogger from './middleware/requestLogger.js';
+import { loadApiRoutes } from './utils/loadApiRoutes.js';
+import requestLogger from './middlewares/requestLogger.js';
+import errorHandler from './middlewares/errorHandler.js';
 import { serverRootDir, staticDistDir } from './utils/path.js';
 
-const __filename = fileURLToPath(import.meta.url);
 const PORT: number = configs.port;
 
 const app = express();
+
 // ********************************************************
 // Load Middleware
 // ********************************************************
@@ -22,23 +23,27 @@ app.use(requestLogger);
 // ********************************************************
 const __apidir = path.resolve(serverRootDir, "./api");
 await loadApiRoutes(app, __apidir).catch((error) => {
-  logger.error('Error registering API routes:', error);
+  logger.error('Error registering API routes:' + error.message);
   process.exit(1);
 });
+logger.info(`API routes has been loaded. Visiting http://localhost:${PORT}/api/hello to test.`);
 
 // ********************************************************
 // Serve static files from the client build directory 
 // For testing production mode locally
 // ********************************************************
-
 let clientBuildPath = staticDistDir;
 app.use(express.static(clientBuildPath));
-logger.info(`Serving static files from ${clientBuildPath}`);
 app.get(/^\/(?!api\/).*/, (req: Request, res: Response) => {
   res.sendFile(path.join(clientBuildPath, 'index.html'));
 });
+logger.info(`Serving static files from ${clientBuildPath}`);
 
 // ********************************************************
+// Error handling middleware (must be last)
+// ********************************************************
+app.use(errorHandler);
+
 // Start the server
 // ********************************************************
 StartServer(PORT);

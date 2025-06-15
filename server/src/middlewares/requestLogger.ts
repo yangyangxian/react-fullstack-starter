@@ -9,7 +9,12 @@ const requestLogger = (req: Request, res: Response, next: NextFunction) => {
     const end = hrtime.bigint();
     const durationInMs = Number((end - start) / BigInt(1000000)); 
 
-    let requestLog = `${req.method} ${req.originalUrl} | Status Code: ${res.statusCode} | ${durationInMs.toPrecision(1)} ms `;
+    // Format duration properly - avoid scientific notation
+    const formattedDuration = durationInMs < 1 
+      ? `${durationInMs.toFixed(2)}` 
+      : `${Math.round(durationInMs)}`;
+
+    let requestLog = `${req.method} ${req.originalUrl} | Status Code: ${res.statusCode} | ${formattedDuration} ms `;
     if (req.method == 'GET') {
       requestLog = requestLog + `| Param: ${JSON.stringify(req.params)} `;
     }

@@ -13,15 +13,18 @@
   "dependencies": {
     "cross-env": "^7.0.3",
     "dotenv": "^16.5.0",
+    "drizzle-orm": "^0.44.2",
     "express": "^5.1.0",
+    "postgres": "^3.4.7",
     "winston": "^3.17.0"
   },
   "devDependencies": {
-    "concurrently": "^9.1.2",
     "@types/dotenv": "^6.1.1",
     "@types/express": "^5.0.2",
     "@types/node": "^20.0.0",
     "@types/winston": "^2.4.4",
+    "concurrently": "^9.1.2",
+    "drizzle-kit": "^0.31.1",
     "tsx": "^4.19.4",
     "typescript": "^5.8.3"
   }
