@@ -12,20 +12,12 @@ const router = Router();
 router.get('/:id', async (req: Request<{ id: string }>, res: Response<ApiResponse<UserResDto>>, next: NextFunction) => {
   const userId = req.params.id;
 
-  try { 
-    const user: UserEntity | null = await UserService.getUser(userId); // Ensure UserService.getUser can return null
+  const user: UserEntity = await UserService.getUser(userId); // Ensure UserService.getUser can return null
 
-    if (user) {
-      const userDto = mapObject(user, new UserResDto()); // Assuming mapObject correctly maps to UserDto
-      
-      res.json(createApiResponse<UserResDto>(userDto));
-    } else {
-      throw new CustomError('NotFoundError', `User with ID ${userId} not found.`);
-    }
-  } catch (err) {
-    // Pass errors to the error handler middleware
-    return next(err);
-  }
+  const userDto = mapObject(user, new UserResDto()); 
+  
+  res.json(createApiResponse<UserResDto>(userDto));
+
 });
 
 export default router;
