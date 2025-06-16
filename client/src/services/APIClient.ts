@@ -28,10 +28,12 @@ export async function getUserById(userId: string): Promise<UserResDto> {
     throw new Error(`HTTP error! status: ${response.status}`);
   }
   const apiResponse = await response.json();
-  if (apiResponse.success && apiResponse.data) {
+  if (apiResponse.error) {
+    // Handle cases where the API signals failure in its own structure, even with a 2xx HTTP status
+    throw new Error(apiResponse.error.message || 'Failed to fetch user data');
+  } else if (apiResponse.data) {
     return apiResponse.data as UserResDto;
   } else {
-    // Handle cases where the API signals failure in its own structure, even with a 2xx HTTP status
-    throw new Error(apiResponse.error?.message || 'Failed to fetch user data');
+    throw new Error('No data received from API');
   }
 }

@@ -11,19 +11,15 @@ const errorHandler = (err: Error, req: Request, res: Response, next: NextFunctio
   }
 
   const isDevelopment = configs.envMode == 'development';
-  let statusCode = 422; // Default status code for errors
+  let statusCode = 500;
   let errorName = 'InternalServerError';
   let errorMessage = 'An unexpected error occurred.';
   let errorStack = err.stack;
 
   if (err instanceof CustomError) {
+    statusCode = 422; // Default status code for business errors caught by CustomError
     errorName = err.name;
     errorMessage = err.message;
-  } else {
-    // For generic errors, keep original name and message if available
-    statusCode = 500; //This is a server error which is not handled by the application
-    errorName = err.name || errorName;
-    errorMessage = err.message || errorMessage;
   }
 
   const apiErrorResponse: ApiErrorResponse = {
@@ -37,7 +33,7 @@ const errorHandler = (err: Error, req: Request, res: Response, next: NextFunctio
     : `API Error(status code:${statusCode}): ${apiErrorResponse.name} | ${apiErrorResponse.message}`;
   logger.error(errorLog);
 
-  const finalResponse = createApiResponse<null>(false, null, apiErrorResponse);
+  const finalResponse = createApiResponse<null>(null, apiErrorResponse);
   res.status(statusCode).json(finalResponse);
 };
 

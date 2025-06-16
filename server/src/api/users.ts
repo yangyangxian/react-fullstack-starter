@@ -18,7 +18,7 @@ router.get('/:id', async (req: Request<{ id: string }>, res: Response<ApiRespons
     if (user) {
       const userDto = mapObject(user, new UserResDto()); // Assuming mapObject correctly maps to UserDto
       
-      res.json(createApiResponse<UserResDto>(true, userDto));
+      res.json(createApiResponse<UserResDto>(userDto));
     } else {
       throw new CustomError('NotFoundError', `User with ID ${userId} not found.`);
     }
