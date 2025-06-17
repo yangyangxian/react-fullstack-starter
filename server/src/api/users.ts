@@ -3,7 +3,6 @@ import { UserEntity, UserService } from '../services/UserService.js';
 import { UserResDto, ApiResponse } from '@fullstack/common';
 import { mapObject } from '../utils/mappers.js';
 import { createApiResponse } from '../utils/apiResponseUtils.js';
-import { CustomError } from '../classes/CustomError.js';
 
 const router = Router();
 

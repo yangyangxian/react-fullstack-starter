@@ -27,6 +27,8 @@ const configs = {
   port: parseInt(GetEnv('PORT', '5050'), 10),
   dbUrl: GetEnv('DATABASE_URL', ''),
   envMode: GetEnv('NODE_ENV', 'development'),
+  corsEnabled: GetEnv('CORS_ENABLED', 'false').toLowerCase() === 'true',
+  corsOrigins: GetEnv('CORS_ORIGINS', 'http://localhost:5173,http://localhost:3000').split(',').map(origin => origin.trim()),
 };
 
 export default configs; 

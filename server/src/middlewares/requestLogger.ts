@@ -6,6 +6,7 @@ const requestLogger = (req: Request, res: Response, next: NextFunction) => {
   const start = hrtime.bigint();
 
   res.on('finish', () => {
+
     const end = hrtime.bigint();
     const durationInMs = Number((end - start) / BigInt(1000000)); 
 

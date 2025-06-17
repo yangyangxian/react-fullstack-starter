@@ -1,12 +1,12 @@
 import express, { Request, Response } from 'express';
 import path from 'path';
-import { fileURLToPath } from 'url';
 import { Server } from 'http';
 import configs from './config.js'; 
 import logger from './utils/logger.js';
 import { loadApiRoutes } from './utils/loadApiRoutes.js';
-import requestLogger from './middlewares/requestLogger.js';
+import requestLoggerMiddleware from './middlewares/requestLogger.js';
 import errorHandler from './middlewares/errorHandler.js';
+import corsMiddleware from './middlewares/corsConfig.js';
 import { serverRootDir, staticDistDir } from './utils/path.js';
 
 const PORT: number = configs.port;
@@ -16,7 +16,9 @@ const app = express();
 // ********************************************************
 // Load Middleware
 // ********************************************************
-app.use(requestLogger);
+// CORS must be applied before other middleware
+app.use(corsMiddleware);
+app.use(requestLoggerMiddleware);
 
 // ********************************************************
 // Register API routes

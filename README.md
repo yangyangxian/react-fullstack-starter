@@ -125,6 +125,26 @@ The application loads environment variables in the following order:
 
    It is recommended to place sensitive information like database credentials in these environment-specific files and ensure they are added to `.gitignore`.
 
+### CORS Configuration
+
+CORS is **disabled by default** - frontend and backend are served from the same origin.
+
+**Enable CORS only if:** you're deploying frontend and backend to different domains/ports.
+
+**Environment Variables:**
+
+- `CORS_ENABLED=true` - Enable CORS
+- `CORS_ORIGINS=https://myapp.com,https://myapp.netlify.app` - Allowed origins (comma-separated)
+
+```bash
+# Single server (default) - no CORS needed
+CORS_ENABLED=false
+
+# Separate deployments - enable CORS
+CORS_ENABLED=true
+CORS_ORIGINS=https://myapp.vercel.com
+```
+
 ---
 
 ## Production
