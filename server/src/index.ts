@@ -1,59 +1,33 @@
-import express, { Request, Response } from 'express';
-import path from 'path';
+import express from 'express';
 import { Server } from 'http';
-import configs from './config.js'; 
+import configs from './appConfig.js';
 import logger from './utils/logger.js';
-import { loadApiRoutes } from './utils/loadApiRoutes.js';
-import requestLoggerMiddleware from './middlewares/requestLogger.js';
-import errorHandler from './middlewares/errorHandler.js';
-import corsMiddleware from './middlewares/corsConfig.js';
-import { serverRootDir, staticDistDir } from './utils/path.js';
-
-const PORT: number = configs.port;
+import apiRoutesMiddleware from './middlewares/apiRoutesMiddleware.js';
+import requestLoggerMiddleware from './middlewares/requestLoggerMiddleware.js';
+import errorHandlingMiddleware from './middlewares/errorHandlingMiddleware.js';
+import corsMiddleware from './middlewares/corsMiddleware.js';
+import staticFileServingMiddleware from './middlewares/staticFileServingMiddleware.js';
 
 const app = express();
 
 // ********************************************************
-// Load Middleware
+// Load Middlewares
 // ********************************************************
-// CORS must be applied before other middleware
-app.use(corsMiddleware);
+app.use(corsMiddleware); // CORS must be applied before other middleware
 app.use(requestLoggerMiddleware);
+app.use(apiRoutesMiddleware);
+app.use(staticFileServingMiddleware);
+app.use(errorHandlingMiddleware); // Error handling must be the last middleware
 
 // ********************************************************
-// Register API routes
-// ********************************************************
-const __apidir = path.resolve(serverRootDir, "./api");
-await loadApiRoutes(app, __apidir).catch((error) => {
-  logger.error('Error registering API routes:' + error.message);
-  process.exit(1);
-});
-logger.info(`API routes has been loaded. Visiting http://localhost:${PORT}/api/hello to test.`);
-
-// ********************************************************
-// Serve static files from the client build directory 
-// For testing production mode locally
-// ********************************************************
-let clientBuildPath = staticDistDir;
-app.use(express.static(clientBuildPath));
-app.get(/^\/(?!api\/).*/, (req: Request, res: Response) => {
-  res.sendFile(path.join(clientBuildPath, 'index.html'));
-});
-logger.info(`Serving static files from ${clientBuildPath}`);
-
-// ********************************************************
-// Error handling middleware (must be last)
-// ********************************************************
-app.use(errorHandler);
-
 // Start the server
 // ********************************************************
-StartServer(PORT);
+StartServer(configs.port);
 
 // ********************************************************
 // Private functions
 // ********************************************************
-function StartServer(port: number): void {
+function StartServer(port : number): void {
   const server: Server = app.listen(port, () => {
     logger.info(`Server running at http://localhost:${port} in ${configs.envMode} mode.`);
   });
@@ -67,7 +41,6 @@ function StartServer(port: number): void {
     }
   });
 
-  // Graceful shutdown on SIGINT/SIGTERM (Ctrl+C or terminal kill)
   const shutdown = () => {
     server.close(() => {
       logger.info('Server closed gracefully.');

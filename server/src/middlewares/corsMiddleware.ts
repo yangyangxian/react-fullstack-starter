@@ -1,5 +1,5 @@
 import cors from 'cors';
-import configs from '../config.js';
+import configs from '../appConfig.js';
 import logger from '../utils/logger.js';
 
 /**

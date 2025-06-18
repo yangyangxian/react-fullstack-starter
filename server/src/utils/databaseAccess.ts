@@ -1,5 +1,5 @@
 import { drizzle } from 'drizzle-orm/postgres-js';
-import configs from '../config.js';
+import configs from '../appConfig.js';
 import { CustomError } from '../classes/CustomError.js';
 import logger from './logger.js';
 

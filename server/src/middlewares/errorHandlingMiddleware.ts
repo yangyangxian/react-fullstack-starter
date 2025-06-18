@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import logger from '../utils/logger.js';
 import { ApiErrorResponse, ApiResponse } from '@fullstack/common';
 import { CustomError } from '../classes/CustomError.js';
-import configs from '../config.js';
+import configs from '../appConfig.js';
 import { createApiResponse } from '../utils/apiResponseUtils.js';
 
 const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {

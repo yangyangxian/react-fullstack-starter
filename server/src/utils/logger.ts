@@ -1,5 +1,5 @@
 import winston, { Logger } from 'winston';
-import config from '../config.js';
+import config from '../appConfig.js';
 import { serverRootDir } from './path.js';
 import path from 'path';
 
