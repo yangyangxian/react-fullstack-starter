@@ -1,8 +1,6 @@
 import { executeQuery } from '../utils/databaseAccess.js';
 import { CustomError } from '../classes/CustomError.js';
-import { mock } from 'node:test';
 
-// User entity interface
 export class UserEntity {
   id : string = '';
   name: string = '';
@@ -14,7 +12,8 @@ export class UserService {
   static async getUser(userId: string): Promise<UserEntity> {
     try {
       const result = await executeQuery<UserEntity>(
-        `SELECT id, name, email, created_at as createdAt FROM public.users WHERE id = ${userId}`
+        `SELECT id, name, email, created_at as createdAt FROM users WHERE id = $1`,
+        [userId]
       );
       
       const user = result.length > 0 ? result[0] : null;
@@ -34,12 +33,11 @@ export class UserService {
         };
         return mockUser;
       }
-      // If it's already a CustomError, re-throw it
+
       if (error instanceof CustomError) {
         throw error;
       }
-      
-      // Otherwise, wrap it in a CustomError
+
       throw new CustomError('DatabaseError', 'Failed to retrieve user', error instanceof Error ? error.stack : undefined);
     }
   }
