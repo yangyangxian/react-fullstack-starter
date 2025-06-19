@@ -2,11 +2,11 @@ import express from 'express';
 import { Server } from 'http';
 import configs from './appConfig.js';
 import logger from './utils/logger.js';
-import apiRoutesMiddleware from './middlewares/apiRoutesMiddleware.js';
+import apiRouter from './routes/apiRouter.js';
+import staticRouter from './routes/staticRouter.js';
 import requestLoggerMiddleware from './middlewares/requestLoggerMiddleware.js';
 import errorHandlingMiddleware from './middlewares/errorHandlingMiddleware.js';
 import corsMiddleware from './middlewares/corsMiddleware.js';
-import staticFileServingMiddleware from './middlewares/staticFileServingMiddleware.js';
 
 const app = express();
 
@@ -15,8 +15,16 @@ const app = express();
 // ********************************************************
 app.use(corsMiddleware); // CORS must be applied before other middleware
 app.use(requestLoggerMiddleware);
-app.use(apiRoutesMiddleware);
-app.use(staticFileServingMiddleware);
+
+// ********************************************************  
+// Load Routes
+// ********************************************************
+app.use(apiRouter); // API routes
+app.use(staticRouter); // Static file routes (SPA routing)
+
+// ********************************************************
+// Load Final Middleware
+// ********************************************************
 app.use(errorHandlingMiddleware); // Error handling must be the last middleware
 
 // ********************************************************
@@ -27,7 +35,7 @@ StartServer(configs.port);
 // ********************************************************
 // Private functions
 // ********************************************************
-function StartServer(port : number): void {
+function StartServer(port: number): void {
   const server: Server = app.listen(port, () => {
     logger.info(`Server running at http://localhost:${port} in ${configs.envMode} mode.`);
   });

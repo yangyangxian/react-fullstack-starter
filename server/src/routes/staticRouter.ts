@@ -4,9 +4,9 @@ import { staticDistDir } from '../utils/path.js';
 import logger from '../utils/logger.js';
 
 /**
- * Static Files Middleware
+ * Static Files Router
  * 
- * This middleware serves static files from the client build directory and handles
+ * This router serves static files from the client build directory and handles
  * client-side routing by serving index.html for non-API routes.
  * 
  * Features:
@@ -27,7 +27,6 @@ staticRouter.get(/^\/(?!api\/).*/, (req, res) => {
   res.sendFile(path.join(clientBuildPath, 'index.html'));
 });
 
-// Log static file configuration
-logger.info(`Static files middleware configured. Serving from: ${clientBuildPath}`);
+logger.info(`Static files router configured. Serving from: ${clientBuildPath}`);
 
 export default staticRouter;

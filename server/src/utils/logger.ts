@@ -54,15 +54,19 @@ const createLoggerWithCaller = (baseLogger: Logger) => {
     
     // Handle both string messages and object logging
     if (typeof message === 'object') {
-      // If message is an object, log it as metadata
-      (baseLogger as any)[method]('', { caller, ...message, ...meta });
+      // If message is an object, log it as metadata with proper stringification
+      (baseLogger as any)[method](JSON.stringify(message, null, 2), { caller, ...meta });
     } else {
-      // If message is a string, log normally
-      (baseLogger as any)[method](message, { caller, ...meta });
+      // If message is a string and meta is provided, stringify meta for display
+      if (meta && typeof meta === 'object') {
+        const metaString = meta instanceof Error ? meta.stack || meta.message : JSON.stringify(meta, null, 2);
+        (baseLogger as any)[method](`${message} ${metaString}`, { caller });
+      } else {
+        (baseLogger as any)[method](message, { caller, ...meta });
+      }
     }
   };
 
-  // Return object with all log levels using the same wrapper logic
   return {
     error: wrapLogMethod('error'),
     warn: wrapLogMethod('warn'),
