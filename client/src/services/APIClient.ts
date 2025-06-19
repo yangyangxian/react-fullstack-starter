@@ -1,15 +1,9 @@
 import { HelloResDto, UserResDto } from '@fullstack/common';
-
-let API_BASE_URL: string;
-
-if (import.meta.env.MODE === 'production') {
-  API_BASE_URL = import.meta.env.VITE_API_BASE_URL || ''; 
-} else {
-  API_BASE_URL = '';
-}
-console.log("API_BASE_URL:" + API_BASE_URL);
+import { API_BASE_URL } from '../appConfig.js';
+import logger from '../utils/logger.js';
 
 export async function getHello(): Promise<HelloResDto> {
+  logger.info(`Fetching hello api:${API_BASE_URL}/api/hello`)
   const response = await fetch(`${API_BASE_URL}/api/hello`);
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);

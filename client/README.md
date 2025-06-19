@@ -8,6 +8,31 @@ This is the frontend for the React Fullstack App, built with Vite and React.
 - `npm run build` – Build the production-ready static files to `dist/`.
 - `npm run preview` – Preview the production build locally.
 
+## Configuration
+
+The frontend uses standard Vite environment variables:
+
+- **`.env`** - Development configuration (loaded by `npm run dev`)
+- **`.env.production`** - Production configuration (loaded by `npm run build`)
+
+### Environment Variables
+
+- **`VITE_API_BASE_URL`** - API base URL
+  - **Development**: Usually empty string (same origin)
+  - **Production**: Your API domain (e.g., `https://api.yourapp.com`)
+
+Vite automatically loads the correct environment file based on the build mode.
+
+## Logging
+
+Simple browser-compatible logging with `src/utils/logger.ts`:
+
+```typescript
+import logger from './utils/logger.js';
+
+logger.info('Message'); 
+```
+
 ## Development
 
 - The frontend uses TypeScript and React Router.
