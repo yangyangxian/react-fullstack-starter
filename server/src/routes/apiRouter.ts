@@ -46,7 +46,7 @@ async function loadApiRoutesFromFiles(router: Router, apiDir: string, basePath: 
       const routeName = file.replace(/\.(ts|js)$/, '');
       if (!routeName) continue;
       
-      const routePath = `${basePath}/${routeName}a`;
+      const routePath = `${basePath}/${routeName}`;
       const modulePath = path.join(apiDir, file);
       const moduleUrl = pathToFileURL(modulePath).href;
       

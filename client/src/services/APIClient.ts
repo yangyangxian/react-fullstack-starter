@@ -3,7 +3,7 @@ import { API_BASE_URL } from '../appConfig.js';
 import logger from '../utils/logger.js';
 
 export async function getHello(): Promise<HelloResDto> {
-  logger.info(`Fetching hello api:${API_BASE_URL}/api/hello`)
+  logger.info(`Fetching hello api:${API_BASE_URL}/api/hello`);
   const response = await fetch(`${API_BASE_URL}/api/hello`);
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
@@ -12,6 +12,7 @@ export async function getHello(): Promise<HelloResDto> {
 }
 
 export async function getUserById(userId: string): Promise<UserResDto> {
+
   const response = await fetch(`${API_BASE_URL}/api/users/${encodeURIComponent(userId)}`);
   if (!response.ok) {
     // Attempt to parse the error response from the server
@@ -22,6 +23,7 @@ export async function getUserById(userId: string): Promise<UserResDto> {
     throw new Error(`HTTP error! status: ${response.status}`);
   }
   const apiResponse = await response.json();
+  logger.info(`Received user data for ID ${userId}: ${JSON.stringify(apiResponse)}`);
   if (apiResponse.error) {
     // Handle cases where the API signals failure in its own structure, even with a 2xx HTTP status
     throw new Error(apiResponse.error.message || 'Failed to fetch user data');
