@@ -1,5 +1,6 @@
 import { executeQuery } from '../utils/databaseAccess.js';
 import { CustomError } from '../classes/CustomError.js';
+import { ErrorCode } from '@fullstack/common';
 
 export class UserEntity {
   id : string = '';
@@ -12,14 +13,13 @@ export class UserService {
   static async getUser(userId: string): Promise<UserEntity> {
     try {
       const result = await executeQuery<UserEntity>(
-        `SELECT id, name, email, created_at as createdAt FROM users WHERE id = $1`,
-        [userId]
+        `SELECT id, name, email, created_at as createdAt FROM users WHERE id = $1`, [userId]
       );
       
       const user = result.length > 0 ? result[0] : null;
       
       if (!user) {
-        throw new CustomError('UserNotFound', `User with ID ${userId} not found`);
+        throw new CustomError(ErrorCode.NOT_FOUND, `User with ID ${userId} not found`);
       }
       
       return user;

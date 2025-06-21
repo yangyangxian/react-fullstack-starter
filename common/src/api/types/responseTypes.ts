@@ -1,6 +1,6 @@
 // This file will contain shared API/DTO types.
 export interface ApiErrorResponse {
-  name: string;
+  code: string;
   message: string;
   timestamp: string;
   stack?: string;

@@ -16,14 +16,14 @@ function HomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-pink-100 font-sans flex flex-col">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 to-pink-100 flex flex-col">
       {/* Fixed top navigation bar */}
       <nav className="fixed top-0 left-0 w-full bg-white shadow-md z-50 flex justify-between items-center h-16 px-8">
         <div className="flex gap-6">
           <NavLink
             to="/home/nestedroutesguide"
             className={({ isActive }) => {
-              const commonClasses = "py-2 px-6 rounded-lg font-semibold text-lg no-underline transition-colors duration-200 ease-in-out";
+              const commonClasses = "py-2 px-6 rounded-lg text-lg no-underline transition-colors duration-200 ease-in-out";
               if (isActive) {
                 return `${commonClasses} bg-green-600 text-white`;
               }
@@ -35,7 +35,7 @@ function HomePage() {
           <NavLink
             to="/home/apidataexample"
             className={({ isActive }) => {
-              const commonClasses = "py-2 px-6 rounded-lg font-semibold text-lg no-underline transition-colors duration-200 ease-in-out";
+              const commonClasses = "py-2 px-6 rounded-lg text-lg no-underline transition-colors duration-200 ease-in-out";
               if (isActive) {
                 return `${commonClasses} bg-pink-500 text-white`;
               }
@@ -50,7 +50,7 @@ function HomePage() {
         <div className="flex items-center gap-4">
           <button
             onClick={handleLogout}
-            className="py-2 px-4 bg-pink-500 text-white border-none rounded-md text-sm font-semibold cursor-pointer transition-colors duration-200 hover:bg-pink-700"
+            className="py-2 px-4 bg-pink-500 text-white border-none rounded-md text-sm cursor-pointer transition-colors duration-200 hover:bg-pink-700"
           >
             Logout
           </button>
