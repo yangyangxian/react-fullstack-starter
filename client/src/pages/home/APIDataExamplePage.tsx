@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { HelloResDto, UserResDto } from '@fullstack/common';
-import { getHello, getUserById } from '../../services/APIClient';
+import { apiClient } from '../../utils/APIClient';
 
 function APIDataExamplePage() {
   const [hello, setHello] = useState<HelloResDto | null>(null);
@@ -9,7 +9,7 @@ function APIDataExamplePage() {
   const [userError, setUserError] = useState<string | null>(null);
 
   useEffect(() => {
-    getHello()
+    apiClient.get<HelloResDto>('/api/hello')
       .then((data: HelloResDto) => setHello(data))
       .catch((error: unknown) => console.error('Error fetching /api/hello:', error));
   }, []);
@@ -28,7 +28,7 @@ function APIDataExamplePage() {
     setUserError(null);
     setUserData(null);
     try {
-      const data: UserResDto = await getUserById(userIdInput);
+      const data: UserResDto = await apiClient.get<UserResDto>(`/api/users/${encodeURIComponent(userIdInput)}`)
       setUserData(data);
     } catch (error: any) {
       console.error('Error fetching /api/users/:id', error);
