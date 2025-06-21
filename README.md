@@ -10,7 +10,6 @@ A full stack scaffold built on Vite/React for the frontend and Express.js/Node f
 - **Client-Side Dynamic Routing**: The frontend features a dynamic routing system that automatically generates routes from `.tsx` files in `client/src/pages`. This includes support for nested routes, route grouping with `(folder)` syntax, and automatic protection of routes.
 - **Shared Types & DTOs**: The `common/` package provides shared types and Data Transfer Objects (e.g., `UserResDto`, `HelloResDto`) for type-safe communication between client and server.
 - **Database Integration (Backend)**:
-  - Utilizes **Drizzle ORM** for type-safe SQL query building and execution.
   - A minimal database access utility (`server/src/utils/databaseAccess.ts`) provides a centralized `executeQuery` function.
 - **Out-of-the-Box Backend Middleware**:
   - Includes pre-configured middleware for essential backend tasks such as:

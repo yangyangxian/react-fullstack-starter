@@ -9,6 +9,7 @@ class AppConfig {
   public readonly envMode: string;
   public readonly corsEnabled: boolean;
   public readonly corsOrigins: string[];
+  public readonly staticDir: string;
 
   constructor() {
     // Load environment variables
@@ -22,6 +23,7 @@ class AppConfig {
     this.corsOrigins = this.getEnv('CORS_ORIGINS', 'http://localhost:5173,http://localhost:3000')
       .split(',')
       .map(origin => origin.trim());
+    this.staticDir = this.getEnv('STATIC_DIR', '');
   }
 
   /**

@@ -1,4 +1,4 @@
-import { executeQuery } from '../utils/databaseAccess.js';
+import { executeQuery } from '../database/databaseAccess.js';
 import { CustomError } from '../classes/CustomError.js';
 import { ErrorCode } from '@fullstack/common';
 

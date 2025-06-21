@@ -1,7 +1,7 @@
 import postgres from 'postgres';
 import configs from '../appConfig.js';
 import { CustomError } from '../classes/CustomError.js';
-import logger from './logger.js';
+import logger from '../utils/logger.js';
 
 if (!configs.dbUrl || configs.dbUrl.trim() === '') {
   logger.error('DATABASE_URL is not set or is empty. Database operations may fail. Please check your environment variables.');
