@@ -54,7 +54,7 @@ Key features of the dynamic routing system:
 - **Authentication**: Routes are automatically wrapped with a `ProtectedRoute` component, which handles authentication logic and redirects unauthenticated users to the login page.
 - **Not Found Handling**: A wildcard route (`*`) is automatically added to display a `NotFoundPage` for any unmatched paths.
 
-The core logic for this dynamic routing can be found in `src/services/pageRouteGenerator.ts` and is utilized within `src/App.tsx`.
+The core logic for this dynamic routing can be found in `src/routes/pageRouteGenerator.ts` and is utilized within `src/App.tsx`.
 
 ## Project Structure
 

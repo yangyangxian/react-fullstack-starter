@@ -14,8 +14,8 @@ A full stack scaffold built on Vite/React for the frontend and Express.js/Node f
   - A minimal database access utility (`server/src/utils/databaseAccess.ts`) provides a centralized `executeQuery` function.
 - **Out-of-the-Box Backend Middleware**:
   - Includes pre-configured middleware for essential backend tasks such as:
-    - Centralized error handling (`server/src/middlewares/errorHandler.ts`) for consistent JSON error responses.
-    - Incoming request logging (`server/src/middlewares/requestLogger.ts`).
+    - Centralized error handling (`server/src/middlewares/errorHandlingMiddleware.ts`) for consistent JSON error responses.
+    - Incoming request logging (`server/src/middlewares/requestLoggerMiddleware.ts`).
 
 ---
 
@@ -25,18 +25,17 @@ A full stack scaffold built on Vite/React for the frontend and Express.js/Node f
   - React
   - Vite
   - TypeScript
-  - Tailwind CSS (Assumed, as it's common with Vite/React and often requested)
+  - Tailwind CSS
 - **Backend**:
   - Node.js
   - Express.js
   - TypeScript
-  - Drizzle ORM (for database interaction)
   - Winston
 - **Shared Code**:
-  - TypeScript (in the `common/` package for DTOs and shared logic)
+  - TypeScript
 - **Build & Package Management**:
   - npm
-  - Vite (for frontend bundling and development server)
+  - Vite
 
 ---
 
