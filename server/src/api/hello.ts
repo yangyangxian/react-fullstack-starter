@@ -1,10 +1,10 @@
 import { Router, Request, Response } from 'express';
-import { HelloResDto } from '@fullstack/common'; 
-import { createApiResponse } from 'src/utils/apiResponseUtils';
+import { HelloResDto, ApiResponse } from '@fullstack/common'; 
+import { createApiResponse } from '../utils/apiResponseUtils.js';
 
 const router = Router();
 
-router.get('/', (req: Request, res: Response<HelloResDto>) => {
+router.get('/', (req: Request, res: Response<ApiResponse<HelloResDto>>) => {
   const response: HelloResDto = { message: 'Hello from /api/hello!'};
   res.json(createApiResponse<HelloResDto>(response));
 });
