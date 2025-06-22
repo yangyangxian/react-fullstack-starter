@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
 import logger from '../utils/logger.js';
-import { ApiErrorResponse, HttpStatusCode } from '@fullstack/common';
+import { ApiErrorResponse, ErrorCodes, HttpStatusCode } from '@fullstack/common';
 import { CustomError } from '../classes/CustomError.js';
 import configs from '../appConfig.js';
-import { createApiResponse } from '../utils/apiResponseUtils.js';
+import { createApiResponse } from '../utils/apiUtils.js';
 
 const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
   if (res.headersSent) {
@@ -18,6 +18,13 @@ const errorHandler = (err: Error, req: Request, res: Response, next: NextFunctio
 
   if (err instanceof CustomError) {
     statusCode = HttpStatusCode.UNPROCESSABLE_ENTITY; // Default status code for business errors caught by CustomError
+    if (err.errorCode == ErrorCodes.UNAUTHORIZED
+      || err.errorCode == ErrorCodes.MISSING_CREDENTIALS
+      || err.errorCode == ErrorCodes.INVALID_CREDENTIALS
+    ) {
+      statusCode = HttpStatusCode.UNAUTHORIZED;
+    }
+
     errorName = err.name;
     errorMessage = err.message;
   }

@@ -1,9 +1,14 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { LoginReqDto, UserResDto } from '@fullstack/common';
+import { apiClient } from '../utils/APIClient';
+import logger from '../utils/logger';
 
 interface IAuthContext {
   isAuthenticated: boolean;
-  login: () => void;
-  logout: () => void;
+  user: UserResDto | null;
+  login: (email: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
+  isLoading: boolean;
 }
 
 const AuthContext = createContext<IAuthContext | undefined>(undefined);
@@ -17,15 +22,68 @@ export function useAuth(): IAuthContext {
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
-  // This should be false by default in a real application, set to true for testing purposes
-  // In a real application, you would typically check authentication status from a server or local storage
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState<UserResDto | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const login = () => setIsAuthenticated(true);
-  const logout = () => setIsAuthenticated(false);
+  // Check authentication status on mount
+  useEffect(() => {
+    checkAuthStatus();
+  }, []);
+
+  const checkAuthStatus = async () => {
+    try {
+      setIsLoading(true);
+      const userData = await apiClient.get<UserResDto>('/api/auth/me');
+      setUser(userData);
+      setIsAuthenticated(true);
+      logger.info('User authenticated:', userData);
+    } catch (error) {
+      setUser(null);
+      setIsAuthenticated(false);
+      logger.info('User not authenticated');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const login = async (email: string, password: string): Promise<void> => {
+    try {
+      setIsLoading(true);
+      const userData = await apiClient.post<LoginReqDto, UserResDto>(
+        '/api/auth/login',
+        { email, password }
+      );
+      setUser(userData);
+      setIsAuthenticated(true);
+      logger.info('Login successful:', userData);
+    } catch (error) {
+      logger.error('Login failed:', error);
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const logout = async (): Promise<void> => {
+    try {
+      setIsLoading(true);
+      await apiClient.post('/api/auth/logout', {});
+      setUser(null);
+      setIsAuthenticated(false);
+      logger.info('Logout successful');
+    } catch (error) {
+      logger.error('Logout failed:', error);
+      // Even if logout fails on server, clear local state
+      setUser(null);
+      setIsAuthenticated(false);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, user, login, logout, isLoading }}>
       {children}
     </AuthContext.Provider>
   );

@@ -2,7 +2,7 @@ import { Router, Request, Response, NextFunction } from 'express';
 import { UserEntity, UserService } from '../services/UserService.js';
 import { UserReqDto, UserResDto, ApiResponse } from '@fullstack/common';
 import { mapObject } from '../utils/mappers.js';
-import { createApiResponse } from '../utils/apiResponseUtils.js';
+import { createApiResponse } from '../utils/apiUtils.js';
 
 const router = Router();
 

@@ -1,10 +1,19 @@
+import { ErrorCodes } from '@fullstack/common';
+
 export class CustomError extends Error {
   public readonly timestamp: string;
+  public readonly errorCode: ErrorCodes;
 
-  constructor(name: string, message: string, stack?: string) {
+  constructor(
+    name: string, 
+    message: string, 
+    errorCode: ErrorCodes,
+    stack?: string
+  ) {
     super(message);
     
     this.name = name;
+    this.errorCode = errorCode;
     
     // Set custom stack if provided, otherwise use the default
     if (stack) {

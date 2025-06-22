@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import { HelloResDto, UserResDto } from '@fullstack/common';
 import { apiClient } from '../../utils/APIClient';
+import { useAuth } from '../../providers/AuthProvider';
 
-function APIDataExamplePage() {
-  const [hello, setHello] = useState<HelloResDto | null>(null);
+function APIDataExamplePage() {  const [hello, setHello] = useState<HelloResDto | null>(null);
   const [userIdInput, setUserIdInput] = useState('');
   const [userData, setUserData] = useState<UserResDto | null>(null);
   const [userError, setUserError] = useState<string | null>(null);
+  const { user } = useAuth();
 
   useEffect(() => {
     apiClient.get<HelloResDto>('/api/hello')
@@ -32,8 +33,7 @@ function APIDataExamplePage() {
       setUserData(data);
     } catch (error: any) {
       console.error('Error fetching /api/users/:id', error);
-      setUserError(error.message || 'Failed to fetch user data.');
-    }
+      setUserError(error.message || 'Failed to fetch user data.');    }
   };
 
   return (
@@ -84,8 +84,7 @@ function APIDataExamplePage() {
             <p className="text-gray-700"><strong>ID:</strong> {userData.id}</p>
             <p className="text-gray-700"><strong>Name:</strong> {userData.name}</p>
             <p className="text-gray-700"><strong>Email:</strong> {userData.email}</p>
-          </div>
-        )}
+          </div>        )}
       </div>
 
       <p className="mt-12 text-gray-500 text-sm border-t border-gray-200 pt-8">

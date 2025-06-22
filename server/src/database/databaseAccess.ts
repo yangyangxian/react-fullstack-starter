@@ -1,6 +1,7 @@
 import postgres from 'postgres';
 import configs from '../appConfig.js';
 import { CustomError } from '../classes/CustomError.js';
+import { ErrorCodes } from '@fullstack/common';
 import logger from '../utils/logger.js';
 
 if (!configs.dbUrl || configs.dbUrl.trim() === '') {
@@ -13,15 +14,17 @@ const sql = postgres(configs.dbUrl || '', {
 
 export async function executeQuery<T = any>(query: string, params: any[] = []): Promise<T[]> {
   if (!configs.dbUrl || configs.dbUrl.trim() === '') {
-    throw new CustomError('DatabaseURLNotConfigured', 'DATABASE_URL is not configured.');
+    throw new CustomError(
+      'DatabaseURLNotConfigured', 
+      'DATABASE_URL is not configured.',
+      ErrorCodes.DATABASE_CONNECTION_NOT_CONFIGURED
+    );
   }
   
   try {
     const result = await sql.unsafe(query, params);
     return result as unknown as T[];
   } catch (error) {
-    throw new CustomError('DatabaseExecutionError', 
-      error instanceof Error ? error.message : 'Database query failed'
-    );
+    throw error;
   }
 }

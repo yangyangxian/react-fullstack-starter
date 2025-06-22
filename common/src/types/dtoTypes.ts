@@ -18,3 +18,13 @@ export class HelloResDto {
   message: string = '';
 }
 
+// Authentication DTOs
+export class LoginReqDto {
+  email: string = '';
+  password: string = '';
+}
+
+export class LogoutResDto {
+  message: string = '';
+}
+

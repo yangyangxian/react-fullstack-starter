@@ -1,4 +1,5 @@
 import express from 'express';
+import cookieParser from 'cookie-parser';
 import { Server } from 'http';
 import configs from './appConfig.js';
 import logger from './utils/logger.js';
@@ -7,6 +8,7 @@ import staticRouter from './routes/staticRouter.js';
 import requestLoggerMiddleware from './middlewares/requestLoggerMiddleware.js';
 import errorHandlingMiddleware from './middlewares/errorHandlingMiddleware.js';
 import corsMiddleware from './middlewares/corsMiddleware.js';
+import { globalAuthMiddleware } from './middlewares/authMiddleware.js';
 
 const app = express();
 
@@ -14,7 +16,10 @@ const app = express();
 // Load Middlewares
 // ********************************************************
 app.use(corsMiddleware); // CORS must be applied before other middleware
+app.use(cookieParser()); // Parse cookies
+app.use(express.json()); // Parse JSON bodies
 app.use(requestLoggerMiddleware);
+app.use(globalAuthMiddleware); // Global authentication with public route whitelist
 
 // ********************************************************  
 // Load Routes
