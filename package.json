@@ -19,7 +19,7 @@
     "install:server": "npm install --prefix server",
     "install:client": "npm install --prefix client",
     "install:common": "npm install --prefix common",
-    "install:all": "npm install --prefix server && npm install --prefix client && npm run install:common && npm install"
+    "install": "npm install --prefix server && npm install --prefix client && npm run install:common"
   },
   "devDependencies": {
     "concurrently": "^9.1.2",
