@@ -19,7 +19,11 @@ export class UserService {
       const user = result.length > 0 ? result[0] : null;
       
       if (!user) {
-        throw new CustomError(ErrorCode.NOT_FOUND, `User with ID ${userId} not found`);
+        throw new CustomError(
+          'UserNotFound',
+          `User with ID ${userId} not found`,
+          ErrorCode.NOT_FOUND
+        );
       }
       
       return user;
@@ -38,7 +42,12 @@ export class UserService {
         throw error;
       }
 
-      throw new CustomError('DatabaseError', 'Failed to retrieve user', error instanceof Error ? error.stack : undefined);
+      throw new CustomError(
+        'DatabaseError', 
+        'Failed to retrieve user',
+        ErrorCode.INTERNAL_ERROR,
+        error instanceof Error ? error.stack : undefined
+      );
     }
   }
 }

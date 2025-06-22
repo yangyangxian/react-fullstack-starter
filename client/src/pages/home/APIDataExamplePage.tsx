@@ -1,12 +1,16 @@
 import { useEffect, useState } from 'react';
 import { HelloResDto, UserResDto } from '@fullstack/common';
 import { apiClient } from '../../utils/APIClient';
+import { useAuth } from '../../providers/AuthProvider';
 
 function APIDataExamplePage() {
   const [hello, setHello] = useState<HelloResDto | null>(null);
   const [userIdInput, setUserIdInput] = useState('');
   const [userData, setUserData] = useState<UserResDto | null>(null);
   const [userError, setUserError] = useState<string | null>(null);
+  const [authUserData, setAuthUserData] = useState<UserResDto | null>(null);
+  const [authError, setAuthError] = useState<string | null>(null);
+  const { user } = useAuth();
 
   useEffect(() => {
     apiClient.get<HelloResDto>('/api/hello')
@@ -33,6 +37,18 @@ function APIDataExamplePage() {
     } catch (error: any) {
       console.error('Error fetching /api/users/:id', error);
       setUserError(error.message || 'Failed to fetch user data.');
+    }
+  };
+
+  const handleTestAuthEndpoint = async () => {
+    setAuthError(null);
+    setAuthUserData(null);
+    try {
+      const data: UserResDto = await apiClient.get<UserResDto>('/api/auth/me');
+      setAuthUserData(data);
+    } catch (error: any) {
+      console.error('Error fetching /api/auth/me', error);
+      setAuthError(error.message || 'Failed to fetch authenticated user data.');
     }
   };
 
@@ -88,8 +104,36 @@ function APIDataExamplePage() {
         )}
       </div>
 
+      <div className="mt-12 pt-8 border-t border-gray-200">
+        <h3 className="text-pink-500 mb-4 text-2xl font-semibold">
+          Authentication Example
+        </h3>
+        <p className="text-gray-700 mb-4">
+          Current authenticated user: <strong>{user?.name || user?.email || 'None'}</strong>
+        </p>
+        <button
+          onClick={handleTestAuthEndpoint}
+          className="p-3 text-base bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white border-none rounded-lg cursor-pointer transition-all duration-200 shadow-md hover:shadow-lg"
+        >
+          Test /api/auth/me Endpoint
+        </button>
+        {authError && (
+          <p className="text-red-500 mt-4">
+            <strong>Error:</strong> {authError}
+          </p>
+        )}
+        {authUserData && (
+          <div className="mt-6 p-4 bg-green-50 rounded-lg shadow text-left">
+            <h4 className="text-xl font-semibold text-gray-800 mb-2">Authenticated User:</h4>
+            <p className="text-gray-700"><strong>ID:</strong> {authUserData.id}</p>
+            <p className="text-gray-700"><strong>Name:</strong> {authUserData.name}</p>
+            <p className="text-gray-700"><strong>Email:</strong> {authUserData.email}</p>
+          </div>
+        )}
+      </div>
+
       <p className="mt-12 text-gray-500 text-sm border-t border-gray-200 pt-8">
-        This page showcases fetching data from <code>/api/hello</code> and <code>/api/users/:id</code>.
+        This page showcases fetching data from <code>/api/hello</code>, <code>/api/users/:id</code>, and <code>/api/auth/me</code>.
       </p>
     </div>
   );

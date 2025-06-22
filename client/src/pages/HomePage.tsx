@@ -3,11 +3,15 @@ import { NavLink } from 'react-router-dom';
 import { useAuth } from '../providers/AuthProvider';
 
 function HomePage() {
-  const { logout } = useAuth();
+  const { logout, user, isLoading } = useAuth();
   const location = useLocation();
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
   };
 
   // If we're at exactly / or /home (no child route), redirect to the first nested route
@@ -48,11 +52,17 @@ function HomePage() {
 
         {/* User info and logout */}
         <div className="flex items-center gap-4">
+          {user && (
+            <span className="text-slate-700">
+              Welcome, {user.name || user.email}!
+            </span>
+          )}
           <button
             onClick={handleLogout}
-            className="py-2 px-4 bg-pink-500 text-white border-none rounded-md text-sm cursor-pointer transition-colors duration-200 hover:bg-pink-700"
+            disabled={isLoading}
+            className="py-2 px-4 bg-pink-500 text-white border-none rounded-md text-sm cursor-pointer transition-colors duration-200 hover:bg-pink-700 disabled:bg-slate-400 disabled:cursor-not-allowed"
           >
-            Logout
+            {isLoading ? 'Logging out...' : 'Logout'}
           </button>
         </div>
       </nav>

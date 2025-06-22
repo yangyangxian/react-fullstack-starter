@@ -57,7 +57,8 @@ export class APIClient {
       method,
       headers: {
         'Content-Type': 'application/json'
-      }
+      },
+      credentials: 'include' // This ensures cookies are sent with requests
     };
 
     if (requestBody && method !== 'GET') {

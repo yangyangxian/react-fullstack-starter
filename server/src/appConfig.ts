@@ -10,6 +10,7 @@ class AppConfig {
   public readonly corsEnabled: boolean;
   public readonly corsOrigins: string[];
   public readonly staticDir: string;
+  public readonly jwtSecret: string;
 
   constructor() {
     // Load environment variables
@@ -24,6 +25,7 @@ class AppConfig {
       .split(',')
       .map(origin => origin.trim());
     this.staticDir = this.getEnv('STATIC_DIR', '');
+    this.jwtSecret = this.getEnv('JWT_SECRET');
   }
 
   /**

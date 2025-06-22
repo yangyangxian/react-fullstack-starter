@@ -3,7 +3,7 @@ import logger from '../utils/logger.js';
 import { ApiErrorResponse, HttpStatusCode } from '@fullstack/common';
 import { CustomError } from '../classes/CustomError.js';
 import configs from '../appConfig.js';
-import { createApiResponse } from '../utils/apiResponseUtils.js';
+import { createApiResponse } from '../utils/apiUtils.js';
 
 const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
   if (res.headersSent) {

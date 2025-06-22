@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { HelloResDto, ApiResponse } from '@fullstack/common'; 
-import { createApiResponse } from '../utils/apiResponseUtils.js';
+import { createApiResponse } from '../utils/apiUtils.js';
 
 const router = Router();
 
