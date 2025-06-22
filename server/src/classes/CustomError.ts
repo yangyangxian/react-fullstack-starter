@@ -1,13 +1,13 @@
-import { ErrorCode } from '@fullstack/common';
+import { ErrorCodes } from '@fullstack/common';
 
 export class CustomError extends Error {
   public readonly timestamp: string;
-  public readonly errorCode: ErrorCode;
+  public readonly errorCode: ErrorCodes;
 
   constructor(
     name: string, 
     message: string, 
-    errorCode: ErrorCode,
+    errorCode: ErrorCodes,
     stack?: string
   ) {
     super(message);

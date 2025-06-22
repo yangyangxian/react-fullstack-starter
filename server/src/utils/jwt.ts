@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import configs from '../appConfig.js';
 import { CustomError } from '../classes/CustomError.js';
-import { ErrorCode } from '@fullstack/common';
+import { ErrorCodes } from '@fullstack/common';
 
 export interface JWTPayload {
   userId: string;
@@ -14,7 +14,7 @@ export function createJWT(payload: JWTPayload): string {
     throw new CustomError(
       'JWTConfigurationError', 
       'JWT_SECRET is not configured',
-      ErrorCode.INTERNAL_ERROR
+      ErrorCodes.JWT_CONFIGURATION_ERROR
     );
   }
   
@@ -28,7 +28,7 @@ export function verifyJWT(token: string): JWTPayload {
     throw new CustomError(
       'JWTConfigurationError', 
       'JWT_SECRET is not configured',
-      ErrorCode.INTERNAL_ERROR
+      ErrorCodes.JWT_CONFIGURATION_ERROR
     );
   }
   
@@ -38,7 +38,7 @@ export function verifyJWT(token: string): JWTPayload {
     throw new CustomError(
       'JWTVerificationError', 
       'Invalid or expired token',
-      ErrorCode.INVALID_TOKEN
+      ErrorCodes.INVALID_TOKEN
     );
   }
 }

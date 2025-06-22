@@ -1,15 +1,16 @@
-import { Router, Request, Response } from 'express';
+import { Router, Request, Response, NextFunction } from 'express';
 import bcrypt from 'bcryptjs';
 import { createJWT } from '../utils/jwt.js';
 import { createApiResponse } from '../utils/apiUtils.js';
+import { CustomError } from '../classes/CustomError.js';
 import { 
   ApiResponse, 
   UserResDto, 
   LoginReqDto, 
   LogoutResDto, 
-  ErrorCode, 
-  HttpStatusCode 
+  ErrorCodes
 } from '@fullstack/common';
+import appConfig from 'src/appConfig.js';
 
 const router = Router();
 
@@ -24,61 +25,50 @@ const demoUsers = [
 ];
 
 // Login endpoint
-router.post('/login', (req: Request<LoginReqDto>, res: Response<ApiResponse<UserResDto>>) => {
+router.post('/login', (req: Request<LoginReqDto>, res: Response<ApiResponse<UserResDto>>, next: NextFunction) => {
   const loginHandler = async () => {
     try {
       const { email, password }: LoginReqDto = req.body;
       
       if (!email || !password) {
-        return res.status(HttpStatusCode.BAD_REQUEST).json(
-          createApiResponse<UserResDto>(undefined, {
-            code: ErrorCode.MISSING_CREDENTIALS,
-            message: 'Email and password are required',
-            timestamp: new Date().toISOString()
-          })
+        throw new CustomError(
+          'MissingCredentials',
+          'Email and password are required',
+          ErrorCodes.MISSING_CREDENTIALS
         );
       }
       
-      // Find user by email
       const user = demoUsers.find(u => u.email === email);
       if (!user) {
-        return res.status(HttpStatusCode.UNAUTHORIZED).json(
-          createApiResponse<UserResDto>(undefined, {
-            code: ErrorCode.INVALID_CREDENTIALS,
-            message: 'Invalid credentials',
-            timestamp: new Date().toISOString()
-          })
+        throw new CustomError(
+          'InvalidCredentials',
+          'Invalid credentials',
+          ErrorCodes.INVALID_CREDENTIALS
         );
       }
       
-      // Verify password
       const isValidPassword = await bcrypt.compare(password, user.password);
       if (!isValidPassword) {
-        return res.status(HttpStatusCode.UNAUTHORIZED).json(
-          createApiResponse<UserResDto>(undefined, {
-            code: ErrorCode.INVALID_CREDENTIALS,
-            message: 'Invalid credentials',
-            timestamp: new Date().toISOString()
-          })
+        throw new CustomError(
+          'InvalidCredentials',
+          'Invalid credentials',
+          ErrorCodes.INVALID_CREDENTIALS
         );
       }
       
-      // Create JWT token
       const token = createJWT({
         userId: user.id,
         email: user.email,
         name: user.name
       });
       
-      // Set httpOnly cookie for browsers
       res.cookie('auth-token', token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
+        secure: appConfig.envMode === 'production',
         sameSite: 'strict',
-        maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+        maxAge: appConfig.jwtMaxAge
       });
       
-      // Return user data (excluding password)
       const userResDto: UserResDto = {
         id: user.id,
         name: user.name,
@@ -87,14 +77,7 @@ router.post('/login', (req: Request<LoginReqDto>, res: Response<ApiResponse<User
       res.json(createApiResponse<UserResDto>(userResDto));
       
     } catch (error) {
-      console.error('Login error:', error);
-      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json(
-        createApiResponse<UserResDto>(undefined, {
-          code: ErrorCode.INTERNAL_ERROR,
-          message: 'Internal server error',
-          timestamp: new Date().toISOString()
-        })
-      );
+      next(error);
     }
   };
   
@@ -102,50 +85,39 @@ router.post('/login', (req: Request<LoginReqDto>, res: Response<ApiResponse<User
 });
 
 // Get current user (auth status check) - Protected by global auth middleware
-router.get('/me', (req: Request, res: Response<ApiResponse<UserResDto>>) => {
-  try {
-    const user = req.user!; // Global auth middleware ensures user exists
-    
+router.get('/me', (req: Request, res: Response<ApiResponse<UserResDto>>, next: NextFunction) => {
+    const user = req.user; // Global auth middleware sets this
+
+    // If user doesn't exist, something went wrong with authentication
+    if (!user) {
+        throw new CustomError(
+        'AuthenticationError',
+        'User authentication failed',
+        ErrorCodes.UNAUTHORIZED
+        );
+    }
+
     const userResDto: UserResDto = {
-      id: user.userId,
-      name: user.name,
-      email: user.email
+        id: user.userId,
+        name: user.name,
+        email: user.email
     };
     res.json(createApiResponse<UserResDto>(userResDto));
-  } catch (error) {
-    console.error('Get user error:', error);
-    res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json(
-      createApiResponse<UserResDto>(undefined, {
-        code: ErrorCode.INTERNAL_ERROR,
-        message: 'Internal server error',
-        timestamp: new Date().toISOString()
-      })
-    );
-  }
 });
 
 // Logout endpoint
-router.post('/logout', (req: Request, res: Response<ApiResponse<LogoutResDto>>) => {
-  try {
+router.post('/logout', (req: Request, res: Response<ApiResponse<LogoutResDto>>, next: NextFunction) => {
+
     // Clear the auth cookie
     res.clearCookie('auth-token', {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict'
+        httpOnly: true,
+        secure: appConfig.envMode === 'production',
+        sameSite: 'strict'
     });
-    
+
     const logoutResDto: LogoutResDto = { message: 'Logged out successfully' };
     res.json(createApiResponse<LogoutResDto>(logoutResDto));
-  } catch (error) {
-    console.error('Logout error:', error);
-    res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json(
-      createApiResponse<LogoutResDto>(undefined, {
-        code: ErrorCode.INTERNAL_ERROR,
-        message: 'Internal server error',
-        timestamp: new Date().toISOString()
-      })
-    );
-  }
+
 });
 
 export default router;

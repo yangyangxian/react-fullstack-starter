@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { UserResDto } from '@fullstack/common';
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { LoginReqDto, UserResDto } from '@fullstack/common';
 import { apiClient } from '../utils/APIClient';
 import logger from '../utils/logger';
 
@@ -39,7 +39,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setIsAuthenticated(true);
       logger.info('User authenticated:', userData);
     } catch (error) {
-      // User is not authenticated
       setUser(null);
       setIsAuthenticated(false);
       logger.info('User not authenticated');
@@ -51,7 +50,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = async (email: string, password: string): Promise<void> => {
     try {
       setIsLoading(true);
-      const userData = await apiClient.post<{ email: string; password: string }, UserResDto>(
+      const userData = await apiClient.post<LoginReqDto, UserResDto>(
         '/api/auth/login',
         { email, password }
       );

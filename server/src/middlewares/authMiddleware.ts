@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { verifyJWT, JWTPayload } from '../utils/jwt.js';
-import { ErrorCode } from '@fullstack/common';
+import { ErrorCodes } from '@fullstack/common';
 import { CustomError } from '../classes/CustomError.js';
 
 // Extend Request type to include user
@@ -49,18 +49,16 @@ export function authenticateJWT(req: Request, res: Response, next: NextFunction)
       const error = new CustomError(
         'MissingToken',
         'Access token required',
-        ErrorCode.UNAUTHORIZED
+        ErrorCodes.UNAUTHORIZED
       );
       return next(error);
     }
     
-    // Verify the token
     const payload = verifyJWT(token);
     req.user = payload;
     next();
     
   } catch (error) {
-    // Pass any errors to the centralized error handling middleware
     next(error);
   }
 }

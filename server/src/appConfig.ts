@@ -11,6 +11,7 @@ class AppConfig {
   public readonly corsOrigins: string[];
   public readonly staticDir: string;
   public readonly jwtSecret: string;
+  public readonly jwtMaxAge: number; // in milliseconds
 
   constructor() {
     // Load environment variables
@@ -26,6 +27,7 @@ class AppConfig {
       .map(origin => origin.trim());
     this.staticDir = this.getEnv('STATIC_DIR', '');
     this.jwtSecret = this.getEnv('JWT_SECRET');
+    this.jwtMaxAge = parseInt(this.getEnv('JWT_MAX_AGE', '604800000'), 10); // Default to 7 days in ms
   }
 
   /**
