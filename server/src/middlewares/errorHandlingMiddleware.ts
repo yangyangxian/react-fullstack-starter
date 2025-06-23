@@ -11,8 +11,8 @@ const errorHandler = (err: Error, req: Request, res: Response, next: NextFunctio
   }
 
   const isDevelopment = configs.envMode == 'development';
-  let statusCode = HttpStatusCode.INTERNAL_SERVER_ERROR;;
-  let errorName = 'InternalServerError';
+  let statusCode = HttpStatusCode.INTERNAL_SERVER_ERROR;
+  let errorCode = ErrorCodes.INTERNAL_ERROR;
   let errorMessage = 'An unexpected error occurred.';
   let errorStack = err.stack;
 
@@ -25,12 +25,12 @@ const errorHandler = (err: Error, req: Request, res: Response, next: NextFunctio
       statusCode = HttpStatusCode.UNAUTHORIZED;
     }
 
-    errorName = err.name;
+    errorCode = err.errorCode;
     errorMessage = err.message;
   }
 
   const apiErrorResponse: ApiErrorResponse = {
-    code: errorName,
+    code: errorCode,
     message: errorMessage,
     timestamp: (err instanceof CustomError) ? err.timestamp : new Date().toISOString(),
     ...(isDevelopment && { stack: errorStack }),

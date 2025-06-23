@@ -47,7 +47,6 @@ export function authenticateJWT(req: Request, res: Response, next: NextFunction)
     
     if (!token) {
       const error = new CustomError(
-        'MissingToken',
         'Access token required',
         ErrorCodes.UNAUTHORIZED
       );

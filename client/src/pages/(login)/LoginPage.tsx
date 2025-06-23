@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../providers/AuthProvider';
+import { getErrorMessage } from '../../resources/errorMessages';
+import { ApiErrorResponse, ErrorCodes } from '@fullstack/common';
 
 function LoginPage() {
   const navigate = useNavigate();
@@ -16,8 +18,14 @@ function LoginPage() {
     try {
       await login(email, password);
       navigate('/');
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Login failed');
+    } catch (err : ApiErrorResponse | unknown) {
+      // Use centralized error message handling
+      if (err && typeof err === 'object' && 'code' in err) {
+        const apiError = err as ApiErrorResponse;
+        setError(getErrorMessage(apiError.code as ErrorCodes));
+      } else {
+        setError('Login failed. Please try again.');
+      }
     }
   };
 

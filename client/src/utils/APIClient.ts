@@ -1,4 +1,4 @@
-import { ApiResponse } from '@fullstack/common';
+import { ApiResponse, ApiErrorResponse } from '@fullstack/common';
 import { API_BASE_URL } from '../appConfig.js';
 import logger from '../utils/logger.js';
 
@@ -71,11 +71,17 @@ export class APIClient {
 
   private async handleResponse<T>(response: Response): Promise<T> {
     if (!response.ok) {
-      const errorData = await response.json().catch(() => null); // Gracefully handle non-JSON error responses
+      const errorData = await response.json().catch(() => null);
       if (errorData && errorData.error) {
-        throw new Error(`API error: ${errorData.error.message} (Details: ${errorData.error.details || 'N/A'})`);
+        // Throw the ApiErrorResponse directly
+        throw errorData.error as ApiErrorResponse;
       }
-      throw new Error(`HTTP error! status: ${response.status}`);
+      // Fallback error if response is not in our expected format
+      throw {
+        code: 'HTTP_ERROR',
+        message: `HTTP error! status: ${response.status}`,
+        timestamp: new Date().toISOString()
+      } as ApiErrorResponse;
     }
 
     if (response.status === 204) {
@@ -87,11 +93,15 @@ export class APIClient {
 
     if (apiResponse.error) {
       // Handle cases where the API signals failure in its own structure, even with a 2xx HTTP status
-      throw new Error(apiResponse.error.message || 'Failed to fetch data');
+      throw apiResponse.error;
     } else if (apiResponse.data !== undefined && apiResponse.data !== null) {
       return apiResponse.data as T;
     } else {
-      throw new Error('No data received from API');
+      throw {
+        code: 'NO_DATA',
+        message: 'No data received from API',
+        timestamp: new Date().toISOString()
+      } as ApiErrorResponse;
     }
   }
 }

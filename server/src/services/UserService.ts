@@ -19,7 +19,6 @@ export class UserService {
     
     if (!user) {
       throw new CustomError(
-        'UserNotFound',
         `User with ID ${userId} not found`,
         ErrorCodes.NOT_FOUND
       );

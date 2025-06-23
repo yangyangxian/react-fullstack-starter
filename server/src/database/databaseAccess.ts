@@ -15,7 +15,6 @@ const sql = postgres(configs.dbUrl || '', {
 export async function executeQuery<T = any>(query: string, params: any[] = []): Promise<T[]> {
   if (!configs.dbUrl || configs.dbUrl.trim() === '') {
     throw new CustomError(
-      'DatabaseURLNotConfigured', 
       'DATABASE_URL is not configured.',
       ErrorCodes.DATABASE_CONNECTION_NOT_CONFIGURED
     );

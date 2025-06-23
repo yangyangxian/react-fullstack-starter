@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { HelloResDto, UserResDto } from '@fullstack/common';
+import { HelloResDto, UserResDto, ApiErrorResponse, ErrorCodes } from '@fullstack/common';
 import { apiClient } from '../../utils/APIClient';
 import { useAuth } from '../../providers/AuthProvider';
+import { getErrorMessage } from '../../resources/errorMessages';
 
 function APIDataExamplePage() {  const [hello, setHello] = useState<HelloResDto | null>(null);
   const [userIdInput, setUserIdInput] = useState('');
@@ -12,7 +13,13 @@ function APIDataExamplePage() {  const [hello, setHello] = useState<HelloResDto 
   useEffect(() => {
     apiClient.get<HelloResDto>('/api/hello')
       .then((data: HelloResDto) => setHello(data))
-      .catch((error: unknown) => console.error('Error fetching /api/hello:', error));
+      .catch((apiError: ApiErrorResponse) => {
+        console.error('Error fetching /api/hello:', apiError);
+        const errorMessage = apiError?.code 
+          ? getErrorMessage(apiError.code as ErrorCodes)
+          : 'Failed to load';
+        setHello({ message: `Error: ${errorMessage}` });
+      });
   }, []);
 
   const handleUserIdInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,12 +35,21 @@ function APIDataExamplePage() {  const [hello, setHello] = useState<HelloResDto 
     }
     setUserError(null);
     setUserData(null);
-    try {
-      const data: UserResDto = await apiClient.get<UserResDto>(`/api/users/${encodeURIComponent(userIdInput)}`)
-      setUserData(data);
-    } catch (error: any) {
-      console.error('Error fetching /api/users/:id', error);
-      setUserError(error.message || 'Failed to fetch user data.');    }
+    
+    apiClient.get<UserResDto>(`/api/users/${encodeURIComponent(userIdInput)}`)
+      .then((data: UserResDto) => {
+        setUserData(data);
+      })
+      .catch((error: ApiErrorResponse) => {
+        console.error('Error fetching /api/users/:id', error);
+        
+        // Handle structured ApiErrorResponse using centralized error messages
+        if (error?.code) {
+          setUserError(getErrorMessage(error.code as ErrorCodes));
+        } else {
+          setUserError('Failed to fetch user data.');
+        }
+      });
   };
 
   return (

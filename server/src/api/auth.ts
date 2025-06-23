@@ -32,7 +32,6 @@ router.post('/login', (req: Request<LoginReqDto>, res: Response<ApiResponse<User
       
       if (!email || !password) {
         throw new CustomError(
-          'MissingCredentials',
           'Email and password are required',
           ErrorCodes.MISSING_CREDENTIALS
         );
@@ -41,7 +40,6 @@ router.post('/login', (req: Request<LoginReqDto>, res: Response<ApiResponse<User
       const user = demoUsers.find(u => u.email === email);
       if (!user) {
         throw new CustomError(
-          'InvalidCredentials',
           'Invalid credentials',
           ErrorCodes.INVALID_CREDENTIALS
         );
@@ -50,7 +48,6 @@ router.post('/login', (req: Request<LoginReqDto>, res: Response<ApiResponse<User
       const isValidPassword = await bcrypt.compare(password, user.password);
       if (!isValidPassword) {
         throw new CustomError(
-          'InvalidCredentials',
           'Invalid credentials',
           ErrorCodes.INVALID_CREDENTIALS
         );
@@ -91,7 +88,6 @@ router.get('/me', (req: Request, res: Response<ApiResponse<UserResDto>>, next: N
     // If user doesn't exist, something went wrong with authentication
     if (!user) {
         throw new CustomError(
-        'AuthenticationError',
         'User authentication failed',
         ErrorCodes.UNAUTHORIZED
         );

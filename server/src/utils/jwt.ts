@@ -12,7 +12,6 @@ export interface JWTPayload {
 export function createJWT(payload: JWTPayload): string {
   if (!configs.jwtSecret) {
     throw new CustomError(
-      'JWTConfigurationError', 
       'JWT_SECRET is not configured',
       ErrorCodes.JWT_CONFIGURATION_ERROR
     );
@@ -26,7 +25,6 @@ export function createJWT(payload: JWTPayload): string {
 export function verifyJWT(token: string): JWTPayload {
   if (!configs.jwtSecret) {
     throw new CustomError(
-      'JWTConfigurationError', 
       'JWT_SECRET is not configured',
       ErrorCodes.JWT_CONFIGURATION_ERROR
     );
@@ -36,7 +34,6 @@ export function verifyJWT(token: string): JWTPayload {
     return jwt.verify(token, configs.jwtSecret) as JWTPayload;
   } catch (error) {
     throw new CustomError(
-      'JWTVerificationError', 
       'Invalid or expired token',
       ErrorCodes.INVALID_TOKEN
     );

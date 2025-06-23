@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { LoginReqDto, UserResDto } from '@fullstack/common';
+import { ApiErrorResponse, LoginReqDto, UserResDto } from '@fullstack/common';
 import { apiClient } from '../utils/APIClient';
 import logger from '../utils/logger';
 
@@ -32,54 +32,60 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const checkAuthStatus = async () => {
-    try {
-      setIsLoading(true);
-      const userData = await apiClient.get<UserResDto>('/api/auth/me');
-      setUser(userData);
-      setIsAuthenticated(true);
-      logger.info('User authenticated:', userData);
-    } catch (error) {
-      setUser(null);
-      setIsAuthenticated(false);
-      logger.info('User not authenticated');
-    } finally {
-      setIsLoading(false);
-    }
+    setIsLoading(true);
+    apiClient.get<UserResDto>('/api/auth/me')
+      .then((userData: UserResDto) => {
+        setUser(userData);
+        setIsAuthenticated(true);
+        logger.info('User authenticated:', userData);
+      })
+      .catch((error) => {
+        setUser(null);
+        setIsAuthenticated(false);
+        logger.info('User not authenticated');
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   const login = async (email: string, password: string): Promise<void> => {
-    try {
-      setIsLoading(true);
-      const userData = await apiClient.post<LoginReqDto, UserResDto>(
-        '/api/auth/login',
-        { email, password }
-      );
-      setUser(userData);
-      setIsAuthenticated(true);
-      logger.info('Login successful:', userData);
-    } catch (error) {
-      logger.error('Login failed:', error);
-      throw error;
-    } finally {
-      setIsLoading(false);
-    }
+    setIsLoading(true);
+    return apiClient.post<LoginReqDto, UserResDto>(
+      '/api/auth/login',
+      { email, password }
+      )
+      .then((userData: UserResDto) => {
+        setUser(userData);
+        setIsAuthenticated(true);
+        logger.info('Login successful:', userData);
+      })
+      .catch((error : ApiErrorResponse) => {
+        logger.error('Login failed:', error);
+        throw error; // Re-throw so LoginPage can handle it
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   const logout = async (): Promise<void> => {
-    try {
-      setIsLoading(true);
-      await apiClient.post('/api/auth/logout', {});
-      setUser(null);
-      setIsAuthenticated(false);
-      logger.info('Logout successful');
-    } catch (error) {
-      logger.error('Logout failed:', error);
-      // Even if logout fails on server, clear local state
-      setUser(null);
-      setIsAuthenticated(false);
-    } finally {
-      setIsLoading(false);
-    }
+    setIsLoading(true);
+    return apiClient.post('/api/auth/logout', {})
+      .then(() => {
+        setUser(null);
+        setIsAuthenticated(false);
+        logger.info('Logout successful');
+      })
+      .catch((error : ApiErrorResponse) => {
+        logger.error('Logout failed:', error);
+        // Even if logout fails on server, clear local state
+        setUser(null);
+        setIsAuthenticated(false);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   return (
