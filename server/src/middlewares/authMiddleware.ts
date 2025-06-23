@@ -17,7 +17,6 @@ const PUBLIC_API_ROUTES = [
   '/hello',
   '/auth/login',
   '/auth/logout',
-  '/auth/me', // Allow checking auth status without requiring authentication
   // Add more public API routes here as needed
 ];
 

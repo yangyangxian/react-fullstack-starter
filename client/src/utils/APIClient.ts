@@ -40,7 +40,7 @@ export class APIClient {
     return this.makeRequest<void, TResponse>(endpoint, 'DELETE', undefined, queryParams);
   }
 
-  private async makeRequest<TRequestBody, TResponse>(
+  private makeRequest<TRequestBody, TResponse>(
     endpoint: string,
     method: 'GET' | 'POST' | 'PUT' | 'DELETE',
     requestBody?: TRequestBody,
@@ -66,18 +66,18 @@ export class APIClient {
       requestOptions.body = JSON.stringify(requestBody);
     }
 
-    try {
-      const response = await fetch(url, requestOptions);
-      return await this.handleResponse<TResponse>(response);
-    } catch (error) {
-      // Handle network errors (server down, no internet, CORS, etc.)
-      logger.error(`Network error for ${method} ${url}:`, error);
-      throw {
-        code: ErrorCodes.NETWORK_ERROR,
-        message: getErrorMessage(ErrorCodes.NETWORK_ERROR),
-        timestamp: new Date().toISOString()
-      } as ApiErrorResponse;
-    }
+    return fetch(url, requestOptions).then(
+      response => this.handleResponse<TResponse>(response),
+      error => {
+        // Handle network errors (server down, no internet, CORS, etc.)
+        logger.error(`Network error for ${method} ${url}:`, error);
+        throw {
+          code: ErrorCodes.NETWORK_ERROR,
+          message: getErrorMessage(ErrorCodes.NETWORK_ERROR),
+          timestamp: new Date().toISOString()
+        } as ApiErrorResponse;
+      }
+    );
   }
 
   private async handleResponse<T>(response: Response): Promise<T> {

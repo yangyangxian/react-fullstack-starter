@@ -7,19 +7,21 @@ import { DOCS_PATH, SIGNUP_PATH } from '@/routes/routeConfig';
 
 function LoginPage() {
   const navigate = useNavigate();
-  const { login, isLoading } = useAuth();
+  const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoggingIn(true);
     setError('');
-    
+
     try {
       await login(email, password);
       navigate(DOCS_PATH);
-    } catch (err : ApiErrorResponse | unknown) {
+    } catch (err) {
       // Use centralized error message handling
       if (err && typeof err === 'object' && 'code' in err) {
         const apiError = err as ApiErrorResponse;
@@ -27,6 +29,8 @@ function LoginPage() {
       } else {
         setError('Login failed. Please try again.');
       }
+    } finally {
+      setIsLoggingIn(false);
     }
   };
 
@@ -35,7 +39,7 @@ function LoginPage() {
       <div className="p-8 bg-white shadow-xl rounded-lg w-full max-w-sm">
         <h2 className="text-3xl font-bold mb-6 text-slate-800 text-center">Log In</h2>
         {error && (
-          <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+          <div className="text-sm mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
             {error}
           </div>
         )}
@@ -46,7 +50,7 @@ function LoginPage() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required 
-            disabled={isLoading}
+            disabled={isLoggingIn}
             className="p-3 rounded-md border border-slate-300 text-base focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none disabled:bg-slate-100" 
           />
           <input 
@@ -55,15 +59,15 @@ function LoginPage() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required 
-            disabled={isLoading}
+            disabled={isLoggingIn}
             className="p-3 rounded-md border border-slate-300 text-base focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none disabled:bg-slate-100" 
           />
           <button 
             type="submit" 
-            disabled={isLoading}
+            disabled={isLoggingIn}
             className="p-3 bg-green-600 text-white border-none rounded-lg font-semibold text-base cursor-pointer hover:bg-green-700 transition-colors disabled:bg-slate-400 disabled:cursor-not-allowed"
           >
-            {isLoading ? 'Logging in...' : 'Log In'}
+            {isLoggingIn ? 'Logging in...' : 'Log In'}
           </button>
         </form>
         <div className="mt-4 text-sm text-slate-600">

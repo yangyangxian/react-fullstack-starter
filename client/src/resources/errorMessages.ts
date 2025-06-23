@@ -13,7 +13,7 @@ export const ERROR_MESSAGES: Record<ErrorCodes, string> = {
     [ErrorCodes.INTERNAL_ERROR]: 'A server error occurred. Please try again later.',
     [ErrorCodes.DATABASE_CONNECTION_NOT_CONFIGURED]: 'Database configuration error. Please contact support.',
     [ErrorCodes.JWT_CONFIGURATION_ERROR]: 'Authentication system error. Please contact support.',
-    [ErrorCodes.NETWORK_ERROR]: 'Unable to connect to the server. Please check your internet connection.',
+    [ErrorCodes.NETWORK_ERROR]: 'Unable to connect to the server. Please check your internet connection or server status.',
     [ErrorCodes.HTTP_ERROR]: 'A network error occurred. Please try again.',
     [ErrorCodes.NO_DATA]: 'No data received from the server. Please try again.',
 };

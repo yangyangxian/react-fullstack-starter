@@ -8,7 +8,6 @@ interface IAuthContext {
   user: UserResDto | null;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
-  isLoading: boolean;
 }
 
 const AuthContext = createContext<IAuthContext | undefined>(undefined);
@@ -24,33 +23,31 @@ export function useAuth(): IAuthContext {
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState<UserResDto | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isInitialAuthCheckComplete, setIsInitialAuthCheckComplete] = useState(false);
 
   // Check authentication status on mount
   useEffect(() => {
     checkAuthStatus();
   }, []);
 
-  const checkAuthStatus = async () => {
-    setIsLoading(true);
+  const checkAuthStatus = () => {
     apiClient.get<UserResDto>('/api/auth/me')
       .then((userData: UserResDto) => {
         setUser(userData);
         setIsAuthenticated(true);
         logger.info('User authenticated:', userData);
       })
-      .catch((error) => {
+      .catch(() => {
         setUser(null);
         setIsAuthenticated(false);
         logger.info('User not authenticated');
       })
       .finally(() => {
-        setIsLoading(false);
+        setIsInitialAuthCheckComplete(true);
       });
   };
 
-  const login = async (email: string, password: string): Promise<void> => {
-    setIsLoading(true);
+  const login = (email: string, password: string): Promise<void> => {
     return apiClient.post<LoginReqDto, UserResDto>(
       '/api/auth/login',
       { email, password }
@@ -63,14 +60,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .catch((error : ApiErrorResponse) => {
         logger.error('Login failed:', error);
         throw error; // Re-throw so LoginPage can handle it
-      })
-      .finally(() => {
-        setIsLoading(false);
       });
   };
 
-  const logout = async (): Promise<void> => {
-    setIsLoading(true);
+  const logout = (): Promise<void> => {
     return apiClient.post('/api/auth/logout', {})
       .then(() => {
         setUser(null);
@@ -82,15 +75,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         // Even if logout fails on server, clear local state
         setUser(null);
         setIsAuthenticated(false);
-      })
-      .finally(() => {
-        setIsLoading(false);
       });
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, login, logout, isLoading }}>
-      {children}
+    <AuthContext.Provider value={{ isAuthenticated, user, login, logout }}>
+      {isInitialAuthCheckComplete ? children : null}
     </AuthContext.Provider>
   );
 }

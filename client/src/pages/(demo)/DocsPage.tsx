@@ -4,7 +4,7 @@ import { useAuth } from '@/providers/AuthProvider';
 import { ROOT_PATH, DOCS_PATH, DOCS_NESTED_ROUTES_PATH, DOCS_API_EXAMPLE_PATH } from '@/routes/routeConfig';
 
 function DocsPage() {
-  const { logout, user, isLoading } = useAuth();
+  const { logout, user } = useAuth();
   const location = useLocation();
 
   const handleLogout = async () => {
@@ -69,10 +69,9 @@ function DocsPage() {
           )}
           <button
             onClick={handleLogout}
-            disabled={isLoading}
             className="py-2 px-4 bg-pink-500 text-white border-none rounded-md text-sm cursor-pointer transition-colors duration-200 hover:bg-pink-700 disabled:bg-slate-400 disabled:cursor-not-allowed"
           >
-            {isLoading ? 'Logging out...' : 'Logout'}
+            Log Out
           </button>
         </div>
       </nav>
