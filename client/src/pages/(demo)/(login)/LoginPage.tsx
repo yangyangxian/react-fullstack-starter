@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../providers/AuthProvider';
-import { getErrorMessage } from '../../resources/errorMessages';
+import { useAuth } from '../../../providers/AuthProvider';
+import { getErrorMessage } from '../../../resources/errorMessages';
 import { ApiErrorResponse, ErrorCodes } from '@fullstack/common';
+import { DOCS_PATH, SIGNUP_PATH } from '../../../routes/routeConfig';
 
 function LoginPage() {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ function LoginPage() {
     
     try {
       await login(email, password);
-      navigate('/');
+      navigate(DOCS_PATH);
     } catch (err : ApiErrorResponse | unknown) {
       // Use centralized error message handling
       if (err && typeof err === 'object' && 'code' in err) {
@@ -70,7 +71,7 @@ function LoginPage() {
           <p>• alice@demo.com / demo</p>
         </div>
         <button 
-          onClick={() => navigate('/signup')} 
+          onClick={() => navigate(SIGNUP_PATH)} 
           className="mt-6 bg-transparent border-none text-green-600 cursor-pointer text-base hover:underline w-full text-center"
         >
           Don't have an account? Sign Up

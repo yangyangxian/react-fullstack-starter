@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { DOCS_PATH, LOGIN_PATH } from '../../../routes/routeConfig';
 
 function SignupPage() {
   const navigate = useNavigate();
@@ -7,7 +8,7 @@ function SignupPage() {
   const handleSignup = (e: React.FormEvent) => {
     e.preventDefault();
     // Here you would set auth state, for now just redirect
-    navigate('/');
+    navigate(DOCS_PATH);
   };
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50 font-sans">
@@ -26,7 +27,7 @@ function SignupPage() {
           </button>
         </form>
         <button
-          onClick={() => navigate('/login')}
+          onClick={() => navigate(LOGIN_PATH)}
           className="mt-6 bg-transparent border-none text-blue-600 cursor-pointer text-base hover:underline w-full text-center"
         >
           Already have an account? Log In

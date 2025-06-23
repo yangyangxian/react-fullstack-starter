@@ -1,14 +1,12 @@
 import { useEffect, useState } from 'react';
 import { HelloResDto, UserResDto, ApiErrorResponse, ErrorCodes } from '@fullstack/common';
-import { apiClient } from '../../utils/APIClient';
-import { useAuth } from '../../providers/AuthProvider';
-import { getErrorMessage } from '../../resources/errorMessages';
+import { apiClient } from '../../../utils/APIClient';
+import { getErrorMessage } from '../../../resources/errorMessages';
 
 function APIDataExamplePage() {  const [hello, setHello] = useState<HelloResDto | null>(null);
   const [userIdInput, setUserIdInput] = useState('');
   const [userData, setUserData] = useState<UserResDto | null>(null);
   const [userError, setUserError] = useState<string | null>(null);
-  const { user } = useAuth();
 
   useEffect(() => {
     apiClient.get<HelloResDto>('/api/hello')

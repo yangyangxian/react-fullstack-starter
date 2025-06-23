@@ -1,11 +1,13 @@
 import React from 'react';
 import type { RouteObject } from 'react-router-dom';
+import { ROUTE_MAPPINGS } from './routeConfig';
 
 const pageModules = import.meta.glob('../pages/**/*.tsx', { eager: true });
 
 export function getDynamicRoutes(): RouteObject[] {
   const flatRoutes = getPageRoutes();
-  return buildNestedRoutes(flatRoutes);
+  const mappedRoutes = applyRouteMappings(flatRoutes);
+  return buildNestedRoutes(mappedRoutes);
 }
 
 export function getPageRoutes(): RouteObject[] {
@@ -18,31 +20,32 @@ export function getPageRoutes(): RouteObject[] {
         .join('/');
       const segments = relPath.split('/');
       const last = segments[segments.length - 1].replace(/Page$/, '').toLowerCase();
-      if (last === 'home') {
-        return [
-          {
-            path: '/',
-            element: React.createElement((mod as any).default),
-          },
-          {
-            path: '/home',
-            element: React.createElement((mod as any).default),
-          }
-        ];
-      } else if (segments.length > 1 && segments[segments.length - 2] === 'home') {
-        return {
-          path: '/home/' + last,
-          element: React.createElement((mod as any).default),
-        };
-      } else {
-        return {
-          path: '/' + (segments.length > 1 ? segments.slice(0, -1).join('/') + '/' : '') + last,
-          element: React.createElement((mod as any).default),
-        };
-      }
+      
+      // Generate path based on file structure
+      return {
+        path: '/' + (segments.length > 1 ? segments.slice(0, -1).join('/') + '/' : '') + last,
+        element: React.createElement((mod as any).default),
+      };
     })
     .flat();
   return routes;
+}
+
+function applyRouteMappings(routes: RouteObject[]): RouteObject[] {
+  const mappedRoutes = [...routes];
+  
+  // Apply configured route mappings
+  Object.entries(ROUTE_MAPPINGS).forEach(([targetPath, sourcePath]) => {
+    const sourceRoute = routes.find(route => route.path === sourcePath);
+    if (sourceRoute) {
+      mappedRoutes.push({
+        path: targetPath,
+        element: sourceRoute.element,
+      });
+    }
+  });
+  
+  return mappedRoutes;
 }
 
 function buildNestedRoutes(flatRoutes: RouteObject[]): RouteObject[] {
