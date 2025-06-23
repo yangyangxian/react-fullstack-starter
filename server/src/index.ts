@@ -19,13 +19,13 @@ app.use(corsMiddleware); // CORS must be applied before other middleware
 app.use(cookieParser()); // Parse cookies
 app.use(express.json()); // Parse JSON bodies
 app.use(requestLoggerMiddleware);
-app.use(globalAuthMiddleware); // Global authentication with public route whitelist
+app.use('/api', globalAuthMiddleware);
 
 // ********************************************************  
 // Load Routes
 // ********************************************************
-app.use(apiRouter); // API routes
-app.use(staticRouter); // Static file routes (SPA routing)
+app.use(apiRouter); // Apply auth middleware only to API routes
+app.use(staticRouter); // Static file routes (SPA routing) - no auth needed
 
 // ********************************************************
 // Load Final Middleware

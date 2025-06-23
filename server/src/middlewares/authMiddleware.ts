@@ -12,16 +12,18 @@ declare global {
   }
 }
 
-// Public routes that don't require authentication
-const PUBLIC_ROUTES = [
-  '/api/hello',
-  '/api/auth/login',
-  '/api/auth/logout',
-  // Add more public routes here as needed
+// Public API routes that don't require authentication (without /api prefix since middleware is already on /api)
+const PUBLIC_API_ROUTES = [
+  '/hello',
+  '/auth/login',
+  '/auth/logout',
+  '/auth/me', // Allow checking auth status without requiring authentication
+  // Add more public API routes here as needed
 ];
 
 function isPublicRoute(path: string): boolean {
-  return PUBLIC_ROUTES.some(publicRoute => path.startsWith(publicRoute));
+  // Since this middleware is only applied to /api routes, we just check the path after /api
+  return PUBLIC_API_ROUTES.some(publicRoute => path.startsWith(publicRoute));
 }
 
 export function globalAuthMiddleware(req: Request, res: Response, next: NextFunction): void {
