@@ -10,7 +10,7 @@ import {
   LogoutResDto, 
   ErrorCodes
 } from '@fullstack/common';
-import appConfig from 'src/appConfig.js';
+import appConfig from '../appConfig.js';
 
 const router = Router();
 

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../../providers/AuthProvider';
-import { getErrorMessage } from '../../../resources/errorMessages';
+import { useAuth } from '@/providers/AuthProvider';
+import { getErrorMessage } from '@/resources/errorMessages';
 import { ApiErrorResponse, ErrorCodes } from '@fullstack/common';
-import { DOCS_PATH, SIGNUP_PATH } from '../../../routes/routeConfig';
+import { DOCS_PATH, SIGNUP_PATH } from '@/routes/routeConfig';
 
 function LoginPage() {
   const navigate = useNavigate();

@@ -1,4 +1,4 @@
-import { ROOT_PATH } from '../routes/routeConfig';
+import { ROOT_PATH } from '@/routes/routeConfig';
 
 function NotFoundPage() {
   return (

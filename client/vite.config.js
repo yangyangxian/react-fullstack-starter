@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import path from 'path' // Import 'path' module
+import path from 'path' 
 import tailwindcss from '@tailwindcss/vite'
 
 // Get the directory of the current file (client/vite.config.js)
@@ -9,6 +9,11 @@ const __dirname = path.dirname(new URL(import.meta.url).pathname);
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(),tailwindcss()],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, 'src'),
+    },
+  },
   server: {
     proxy: {
       // Proxy API requests starting with /api to the backend server

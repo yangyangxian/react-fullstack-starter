@@ -1,7 +1,7 @@
 import { Outlet, Navigate, useLocation } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
-import { useAuth } from '../../providers/AuthProvider';
-import { ROOT_PATH, DOCS_PATH, DOCS_NESTED_ROUTES_PATH, DOCS_API_EXAMPLE_PATH } from '../../routes/routeConfig';
+import { useAuth } from '@/providers/AuthProvider';
+import { ROOT_PATH, DOCS_PATH, DOCS_NESTED_ROUTES_PATH, DOCS_API_EXAMPLE_PATH } from '@/routes/routeConfig';
 
 function DocsPage() {
   const { logout, user, isLoading } = useAuth();

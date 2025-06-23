@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { DOCS_PATH } from '../routes/routeConfig';
+import { DOCS_PATH } from '@/routes/routeConfig';
 
 function HomePage() {
   const navigate = useNavigate();

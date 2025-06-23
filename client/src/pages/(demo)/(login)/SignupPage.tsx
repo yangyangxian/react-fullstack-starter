@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { DOCS_PATH, LOGIN_PATH } from '../../../routes/routeConfig';
+import { DOCS_PATH, LOGIN_PATH } from '@/routes/routeConfig';
 
 function SignupPage() {
   const navigate = useNavigate();

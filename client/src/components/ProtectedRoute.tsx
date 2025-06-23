@@ -1,7 +1,7 @@
 import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../providers/AuthProvider';
-import { publicRoutes, LOGIN_PATH, SIGNUP_PATH, DOCS_PATH } from '../routes/routeConfig';
+import { useAuth } from '@/providers/AuthProvider';
+import { publicRoutes, LOGIN_PATH, SIGNUP_PATH, DOCS_PATH } from '@/routes/routeConfig';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
