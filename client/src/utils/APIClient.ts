@@ -1,6 +1,7 @@
-import { ApiResponse, ApiErrorResponse } from '@fullstack/common';
+import { ApiResponse, ApiErrorResponse, ErrorCodes } from '@fullstack/common';
 import { API_BASE_URL } from '../appConfig.js';
 import logger from '../utils/logger.js';
+import { getErrorMessage } from '../resources/errorMessages.js';
 
 export class APIClient {
   private baseURL: string;
@@ -65,8 +66,18 @@ export class APIClient {
       requestOptions.body = JSON.stringify(requestBody);
     }
 
-    const response = await fetch(url, requestOptions);
-    return this.handleResponse<TResponse>(response);
+    try {
+      const response = await fetch(url, requestOptions);
+      return await this.handleResponse<TResponse>(response);
+    } catch (error) {
+      // Handle network errors (server down, no internet, CORS, etc.)
+      logger.error(`Network error for ${method} ${url}:`, error);
+      throw {
+        code: ErrorCodes.NETWORK_ERROR,
+        message: getErrorMessage(ErrorCodes.NETWORK_ERROR),
+        timestamp: new Date().toISOString()
+      } as ApiErrorResponse;
+    }
   }
 
   private async handleResponse<T>(response: Response): Promise<T> {
@@ -78,8 +89,8 @@ export class APIClient {
       }
       // Fallback error if response is not in our expected format
       throw {
-        code: 'HTTP_ERROR',
-        message: `HTTP error! status: ${response.status}`,
+        code: ErrorCodes.HTTP_ERROR,
+        message: getErrorMessage(ErrorCodes.HTTP_ERROR, `HTTP error! status: ${response.status}`),
         timestamp: new Date().toISOString()
       } as ApiErrorResponse;
     }
@@ -94,12 +105,13 @@ export class APIClient {
     if (apiResponse.error) {
       // Handle cases where the API signals failure in its own structure, even with a 2xx HTTP status
       throw apiResponse.error;
-    } else if (apiResponse.data !== undefined && apiResponse.data !== null) {
+    } else if (apiResponse.data !== undefined) {
+      // Return the data even if it's null (null is a valid response for some endpoints)
       return apiResponse.data as T;
     } else {
       throw {
-        code: 'NO_DATA',
-        message: 'No data received from API',
+        code: ErrorCodes.NO_DATA,
+        message: getErrorMessage(ErrorCodes.NO_DATA),
         timestamp: new Date().toISOString()
       } as ApiErrorResponse;
     }
