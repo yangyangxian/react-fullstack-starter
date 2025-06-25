@@ -162,3 +162,28 @@ CORS_ORIGINS=https://myapp.vercel.com
   ```
 
   (This command grants full control to your user for all files and directories in the current directory and its subdirectories.)
+
+## 🐳 Docker Deployment (All-in-One)
+
+This project uses a single, all-in-one Dockerfile at the root to build and deploy both the frontend and backend together. The backend serves the frontend on a single port (default: 5055).
+
+### Build & Run
+```sh
+docker build -t fullstack-app .
+docker run -p 5055:5055 fullstack-app
+```
+
+- The app will be available at [http://localhost:5055](http://localhost:5055)
+- Both the frontend and backend are served from this port
+
+---
+
+## 🐳 How Multi-Stage Docker Builds Work in This Project
+
+This project uses a **multi-stage Docker build** to efficiently build and package the fullstack application. Here's how it works:
+
+### Multi-Stage Build Process
+- **Stage 1: Build common** – Compiles the shared code used by both client and server.
+- **Stage 2: Build client** – Builds the frontend using the compiled common code.
+- **Stage 3: Build server** – Builds the backend using the compiled common code.
+- **Stage 4: Production image** – Copies only the built output (and production dependencies) from previous stages into a clean, minimal image for deployment.

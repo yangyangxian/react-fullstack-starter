@@ -12,6 +12,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
+      '@fullstack/common': path.resolve(__dirname, '../common/dist')
     },
   },
   server: {
