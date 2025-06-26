@@ -1,5 +1,5 @@
 # ----------- Stage 1: Build common (shared code) -----------
-FROM node:20-alpine AS common-build
+FROM node:22-alpine AS common-build
 WORKDIR /app/common
 COPY common/package*.json ./
 RUN npm install
@@ -7,7 +7,7 @@ COPY common/ ./
 RUN npm run build
 
 # ----------- Stage 2: Build client (frontend) -----------
-FROM node:20-alpine AS client-build
+FROM node:22-alpine AS client-build
 WORKDIR /app/client
 COPY client/package*.json ./
 RUN npm install
@@ -17,7 +17,7 @@ COPY --from=common-build /app/common/package.json /app/common/package.json
 RUN npm run build:alone
 
 # ----------- Stage 3: Build server (backend) -----------
-FROM node:20-alpine AS server-build
+FROM node:22-alpine AS server-build
 WORKDIR /app/server
 COPY server/package*.json ./
 RUN npm install
@@ -27,7 +27,7 @@ COPY --from=common-build /app/common/package.json /app/common/package.json
 RUN npm run build:alone
 
 # ----------- Stage 4: Production image -----------
-FROM node:20-alpine AS production
+FROM node:22-alpine AS production
 WORKDIR /app
 ENV NODE_ENV=production
 
