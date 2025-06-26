@@ -16,6 +16,7 @@ export const ERROR_MESSAGES: Record<ErrorCodes, string> = {
     [ErrorCodes.NETWORK_ERROR]: 'Unable to connect to the server. Please check your internet connection or server status.',
     [ErrorCodes.HTTP_ERROR]: 'A network error occurred. Please try again.',
     [ErrorCodes.NO_DATA]: 'No data received from the server. Please try again.',
+    [ErrorCodes.EMAIL_ALREADY_EXISTS]: 'The email address you provided is already in use. Please use a different email address.',
 };
 
 /**

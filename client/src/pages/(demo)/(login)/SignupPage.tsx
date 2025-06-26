@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { DOCS_PATH, LOGIN_PATH } from '@/routes/routeConfig';
 import { useAuth } from '@/providers/AuthProvider';
+import { ApiErrorResponse, ErrorCodes } from '@fullstack/common';
+import { getErrorMessage } from '@/resources/errorMessages';
 
 function SignupPage() {
   const navigate = useNavigate();
@@ -19,7 +21,8 @@ function SignupPage() {
       await signup(email, password);
       navigate(DOCS_PATH);
     } catch (err: any) {
-      setError(err?.message || 'Signup failed. Please try again.');
+      const apiError = err as ApiErrorResponse;
+      setError(getErrorMessage(apiError.code as ErrorCodes));
     } finally {
       setIsSigningUp(false);
     }

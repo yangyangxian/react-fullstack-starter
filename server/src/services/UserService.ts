@@ -28,7 +28,7 @@ class UserService {
   async createUser({ name, email, password }: { name: string; email: string; password: string }): Promise<UserEntity> {
     if (await this.getUserByEmail(email)) {
       // TODO: Add a specific error code for conflict/duplicate if needed
-      throw new CustomError('Email already exists', ErrorCodes.INTERNAL_ERROR);
+      throw new CustomError('Email already exists', ErrorCodes.EMAIL_ALREADY_EXISTS);
     }
     const user: UserEntity = {
       id: (this.users.length + 1).toString(),
