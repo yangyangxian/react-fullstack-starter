@@ -2,6 +2,26 @@
 
 This is the frontend for the React Fullstack App, built with Vite and React.
 
+## 🐳 Docker Deployment (Nginx)
+
+This project includes a Dockerfile for building and serving the frontend as a static SPA using Nginx.
+
+> **Important:** You must run the Docker build command from the project root (not from the client directory) so the build can access the shared `common` package.
+
+### Build the Docker Image
+```sh
+docker build -f client/Dockerfile -t frontend-nginx .
+```
+
+### Run the Container
+```sh
+docker run -p 8080:80 frontend-nginx
+```
+
+- The app will be available at [http://localhost:8080](http://localhost:8080)
+- Nginx serves the static files from the build output (`dist/`)
+- The config supports client-side routing (SPA fallback to `index.html`)
+
 ## Scripts
 
 - `npm run dev` – Start the frontend in development mode with hot reload. Proxies API requests to the backend.

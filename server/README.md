@@ -1,5 +1,25 @@
 # Backend for React + Vite Frontend
 
+## 🐳 Docker Deployment (Node.js Backend)
+
+This project includes a Dockerfile for building and running the backend as a Node.js server.
+
+> **Important:** You must run the Docker build command from the project root (not from the server directory) so the build can access the shared `common` package.
+
+### Build the Docker Image
+```sh
+docker build -f server/Dockerfile -t backend .
+```
+
+### Run the Container
+```sh
+docker run -p 5055:5055 backend
+```
+
+- The backend API will be available at [http://localhost:5055/api/*](http://localhost:5055/api/*) by default.
+
+---
+
 This Express.js server serves static files from the frontend (client) build and exposes API endpoints. It uses a shared `common` package for types and DTOs.
 
 ## Usage
