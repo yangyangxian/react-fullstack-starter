@@ -17,6 +17,7 @@ const PUBLIC_API_ROUTES = [
   '/hello',
   '/auth/login',
   '/auth/logout',
+  '/auth/signup',
   // Add more public API routes here as needed
 ];
 
@@ -33,7 +34,7 @@ export function globalAuthMiddleware(req: Request, res: Response, next: NextFunc
   authenticateJWT(req, res, next);
 }
 
-export function authenticateJWT(req: Request, res: Response, next: NextFunction): void {
+function authenticateJWT(req: Request, res: Response, next: NextFunction): void {
   try {
     // Try to get token from cookie first (for browsers)
     let token = req.cookies?.['auth-token'];

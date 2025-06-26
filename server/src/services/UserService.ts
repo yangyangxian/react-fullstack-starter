@@ -1,29 +1,45 @@
-import { executeQuery } from '../database/databaseAccess.js';
+import bcrypt from 'bcryptjs';
 import { CustomError } from '../classes/CustomError.js';
 import { ErrorCodes } from '@fullstack/common';
 
 export class UserEntity {
-  id : string = '';
+  id: string = '';
   name: string = '';
   email: string = '';
+  password?: string = '';
   createdAt: string = '';
 }
 
-export class UserService {
-  static async getUser(userId: string): Promise<UserEntity> {
-    const result = await executeQuery<UserEntity>(
-      `SELECT id, name, email, created_at as createdAt FROM users WHERE id = $1`, [userId]
-    );
-    
-    const user = result.length > 0 ? result[0] : null;
-    
-    if (!user) {
-      throw new CustomError(
-        `User with ID ${userId} not found`,
-        ErrorCodes.NOT_FOUND
-      );
+class UserService {
+  private users: UserEntity[] = [
+    {
+      id: '1',
+      name: 'Alice Smith',
+      email: 'alice@demo.com',
+      password: bcrypt.hashSync('demo', 10),
+      createdAt: new Date().toISOString(),
+    },
+  ];
+
+  async getUserByEmail(email: string): Promise<UserEntity | null> {
+    return this.users.find(u => u.email === email) || null;
+  }
+
+  async createUser({ name, email, password }: { name: string; email: string; password: string }): Promise<UserEntity> {
+    if (await this.getUserByEmail(email)) {
+      // TODO: Add a specific error code for conflict/duplicate if needed
+      throw new CustomError('Email already exists', ErrorCodes.INTERNAL_ERROR);
     }
-    
+    const user: UserEntity = {
+      id: (this.users.length + 1).toString(),
+      name,
+      email,
+      password: await bcrypt.hash(password, 10),
+      createdAt: new Date().toISOString(),
+    };
+    this.users.push(user);
     return user;
   }
 }
+
+export const userService = new UserService();

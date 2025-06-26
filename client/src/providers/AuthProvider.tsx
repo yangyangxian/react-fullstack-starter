@@ -8,6 +8,7 @@ interface IAuthContext {
   user: UserResDto | null;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
+  signup: (email: string, password: string) => Promise<void>;
 }
 
 const AuthContext = createContext<IAuthContext | undefined>(undefined);
@@ -78,8 +79,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       });
   };
 
+  const signup = (email: string, password: string): Promise<void> => {
+    return apiClient.post<LoginReqDto, UserResDto>(
+      '/api/auth/signup',
+      { email, password }
+    )
+      .then((userData: UserResDto) => {
+        setUser(userData);
+        setIsAuthenticated(true);
+        logger.info('Signup successful:', userData);
+      })
+      .catch((error: ApiErrorResponse) => {
+        logger.error('Signup failed:', error);
+        throw error;
+      });
+  };
+
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, user, login, logout, signup }}>
       {isInitialAuthCheckComplete ? children : null}
     </AuthContext.Provider>
   );

@@ -11,74 +11,94 @@ import {
   ErrorCodes
 } from '@fullstack/common';
 import appConfig from '../appConfig.js';
+import { userService } from '../services/UserService.js';
 
 const router = Router();
-
-// Demo users (in real app, this would be a database)  
-const demoUsers = [
-  {
-    id: '1',
-    email: 'alice@demo.com',
-    name: 'Alice Smith',
-    password: bcrypt.hashSync('demo', 10)
-  }
-];
 
 // Login endpoint
 router.post('/login', (req: Request<LoginReqDto>, res: Response<ApiResponse<UserResDto>>, next: NextFunction) => {
   const loginHandler = async () => {
     try {
       const { email, password }: LoginReqDto = req.body;
-      
       if (!email || !password) {
         throw new CustomError(
           'Email and password are required',
           ErrorCodes.MISSING_CREDENTIALS
         );
       }
-      
-      const user = demoUsers.find(u => u.email === email);
+      const user = await userService.getUserByEmail(email);
       if (!user) {
         throw new CustomError(
           'Invalid credentials',
           ErrorCodes.INVALID_CREDENTIALS
         );
       }
-      
-      const isValidPassword = await bcrypt.compare(password, user.password);
+      const isValidPassword = await bcrypt.compare(password, user.password!);
       if (!isValidPassword) {
         throw new CustomError(
           'Invalid credentials',
           ErrorCodes.INVALID_CREDENTIALS
         );
       }
-      
       const token = createJWT({
         userId: user.id,
         email: user.email,
         name: user.name
       });
-      
       res.cookie('auth-token', token, {
         httpOnly: true,
         secure: appConfig.envMode === 'production',
         sameSite: 'strict',
         maxAge: appConfig.jwtMaxAge
       });
-      
       const userResDto: UserResDto = {
         id: user.id,
         name: user.name,
         email: user.email
       };
       res.json(createApiResponse<UserResDto>(userResDto));
-      
     } catch (error) {
       next(error);
     }
   };
-  
   loginHandler();
+});
+
+// Signup endpoint
+router.post('/signup', (req: Request<LoginReqDto>, res: Response<ApiResponse<UserResDto>>, next: NextFunction) => {
+  const signupHandler = async () => {
+    try {
+      const { email, password }: LoginReqDto = req.body;
+      if (!email || !password) {
+        throw new CustomError(
+          'Email and password are required',
+          ErrorCodes.MISSING_CREDENTIALS
+        );
+      }
+      // For demo, use email as name
+      const user = await userService.createUser({ name: email, email, password });
+      const token = createJWT({
+        userId: user.id,
+        email: user.email,
+        name: user.name
+      });
+      res.cookie('auth-token', token, {
+        httpOnly: true,
+        secure: appConfig.envMode === 'production',
+        sameSite: 'strict',
+        maxAge: appConfig.jwtMaxAge
+      });
+      const userResDto: UserResDto = {
+        id: user.id,
+        name: user.name,
+        email: user.email
+      };
+      res.json(createApiResponse<UserResDto>(userResDto));
+    } catch (error) {
+      next(error);
+    }
+  };
+  signupHandler();
 });
 
 // Get current user (auth status check) - Protected by global auth middleware

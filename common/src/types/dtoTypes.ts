@@ -8,9 +8,9 @@ export class UserResDto {
 }
 
 export class UserReqDto {
-  id : string;
-  constructor(id: string) {
-    this.id = id;
+  email : string;
+  constructor(email: string) {
+    this.email = email;
   }
 }
 

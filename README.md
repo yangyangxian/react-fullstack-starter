@@ -178,12 +178,11 @@ docker run -p 5055:5055 fullstack-app
 
 ---
 
-## 🐳 How Multi-Stage Docker Builds Work in This Project
+### User Authentication & Demo Data
 
-This project uses a **multi-stage Docker build** to efficiently build and package the fullstack application. Here's how it works:
+- The backend uses a mock in-memory user service for prototyping and demo purposes.
+- User registration (`/api/auth/signup`) and login (`/api/auth/login`) are supported out-of-the-box.
+- Demo users are managed in memory, so you can test authentication and user-related features without setting up a real database.
+- The API example page demonstrates fetching user data by email using the `/api/users/email/:email` endpoint.
 
-### Multi-Stage Build Process
-- **Stage 1: Build common** – Compiles the shared code used by both client and server.
-- **Stage 2: Build client** – Builds the frontend using the compiled common code.
-- **Stage 3: Build server** – Builds the backend using the compiled common code.
-- **Stage 4: Production image** – Copies only the built output (and production dependencies) from previous stages into a clean, minimal image for deployment.
+---
