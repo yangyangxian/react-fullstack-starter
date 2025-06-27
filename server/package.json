@@ -7,7 +7,7 @@
     "start": "npm --prefix ../common run build && npm run build && cross-env NODE_ENV=production node dist/index.js",
     "build:alone": "tsc -p tsconfig.json",
     "build": "npm --prefix ../common run build && tsc -p tsconfig.json",
-    "dev": "concurrently --raw \"npm --prefix ../common run watch\" \"cross-env NODE_ENV=development tsx watch src/index.ts\"",
+    "dev": "npm --prefix ../client run build && concurrently --raw \"npm --prefix ../common run watch\" \"cross-env NODE_ENV=development tsx watch src/index.ts\"",
     "dev:alone": "cross-env NODE_ENV=development tsx --watch src/index.ts"
   },
   "dependencies": {
