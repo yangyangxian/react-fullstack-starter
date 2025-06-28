@@ -3,7 +3,7 @@ import { userService } from '../services/UserService.js';
 import { UserReqDto, UserResDto, ApiResponse, ErrorCodes } from '@fullstack/common';
 import { mapObject } from '../utils/mappers.js';
 import { createApiResponse } from '../utils/apiUtils.js';
-import { CustomError } from 'src/classes/CustomError.js';
+import { CustomError } from '../classes/CustomError.js';
 
 const router = Router();
 
