@@ -4,15 +4,18 @@ import path from 'path'
 import tailwindcss from '@tailwindcss/vite'
 
 // Get the directory of the current file (client/vite.config.js)
-const __dirname = path.dirname(new URL(import.meta.url).pathname);
+// Fix for Windows: remove leading slash from /C:/... to C:/...
+const __dirname = path.dirname(
+  new URL(import.meta.url).pathname.replace(/^\\?\/([A-Za-z]:)/, '$1')
+);
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(),tailwindcss()],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, 'src'),
-      '@fullstack/common': path.resolve(__dirname, '../common/dist')
+      '@': path.resolve(__dirname, './src').replace(/\\/g, '/'),
+      '@fullstack/common': path.resolve(__dirname, '../common/dist').replace(/\\/g, '/')
     },
   },
   server: {
