@@ -13,7 +13,7 @@ export const publicRoutes: string[] = [
 
 // Route mapping configuration
 export const ROUTE_MAPPINGS = {
-  // Map root path to home page
+  // Map root path to home page, change this to your actual home page component
   [ROOT_PATH]: '/home',
 } as const;
 
