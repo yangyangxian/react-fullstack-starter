@@ -51,6 +51,72 @@ function NestedRoutesGuidePage() {
 
       <div className="mb-8 p-6 bg-emerald-50 rounded-lg border border-emerald-200">
         <h2 className="text-emerald-600 text-2xl mb-4">
+          🚀 Creating a New Nested Route
+        </h2>
+
+        <div className="mb-6">
+          <h3 className="text-emerald-600 text-xl mb-2">
+            Step 1: Create the Parent and Child Component Files
+          </h3>
+          <p className="text-gray-600 mb-4">
+            Create a parent page and child page in the following structure:
+          </p>
+          <pre className="bg-slate-50 p-4 rounded-md text-sm text-slate-700 border border-slate-200 mb-4">
+{`src/pages/
+├── ParentPage.tsx           // Parent route (/parent)
+└── parent/
+    └── ChildPage.tsx        // Child route (/parent/child)`}
+          </pre>
+          <div className="mb-4">
+            <h4 className="text-emerald-700 text-lg mb-1">src/pages/ParentPage.tsx</h4>
+            <pre className="bg-slate-50 p-4 rounded-md text-sm text-slate-700 border border-slate-200">
+{`import { Outlet } from "react-router-dom";
+
+function ParentPage() {
+  return (
+    <div>
+      <h1>Parent Page</h1>
+      <Outlet />
+    </div>
+  );
+}
+
+export default ParentPage;`}
+            </pre>
+          </div>
+          <div>
+            <h4 className="text-emerald-700 text-lg mb-1">src/pages/parent/ChildPage.tsx</h4>
+            <pre className="bg-slate-50 p-4 rounded-md text-sm text-slate-700 border border-slate-200">
+{`function ChildPage() {
+  return (
+    <div>
+      <h2>Child Page</h2>
+      <p>This is a nested route under /parent/child</p>
+    </div>
+  );
+}
+
+export default ChildPage;`}
+            </pre>
+          </div>
+        </div>
+        <div>
+          <h3 className="text-emerald-600 text-xl mb-2">
+            Step 2: That's It! 🎉
+          </h3>
+          <p className="text-gray-600">
+            The dynamic routing system will automatically:
+          </p>
+          <ul className="text-gray-600 pl-6 mt-2 list-disc">
+            <li>Discover your new parent and child components</li>
+            <li>Create the routes <code>/parent</code> and <code>/parent/child</code></li>
+            <li>Render <code>ChildPage</code> inside <code>ParentPage</code> via <code>&lt;Outlet /&gt;</code></li>
+          </ul>
+        </div>
+      </div>
+
+      <div className="mb-8 p-6 bg-emerald-50 rounded-lg border border-emerald-200">
+        <h2 className="text-emerald-600 text-2xl mb-4">
           ⚙️ How It Works
         </h2>
         <ol className="text-gray-600 pl-6 list-decimal">
@@ -67,76 +133,6 @@ function NestedRoutesGuidePage() {
             <strong>Child Rendering:</strong> Child components render inside the <code>&lt;Outlet /&gt;</code> based on the URL
           </li>
         </ol>
-      </div>
-
-      <div className="mb-8 p-6 bg-emerald-50 rounded-lg border border-emerald-200">
-        <h2 className="text-emerald-600 text-2xl mb-4">
-          🚀 Creating a New Nested Route
-        </h2>
-        <p className="text-gray-600 mb-4">
-          Follow these steps to add a new nested route:
-        </p>
-        
-        <div className="mb-6">
-          <h3 className="text-emerald-600 text-xl mb-2">
-            Step 1: Create the Component File
-          </h3>
-          <p className="text-gray-600 mb-2">
-            Create a new file in <code>src/pages/docs/</code>:
-          </p>
-          <pre className="bg-slate-50 p-4 rounded-md text-sm text-slate-700 border border-slate-200">
-{`// src/pages/docs/MyNewFeaturePage.tsx
-function MyNewFeaturePage() {
-  return (
-    <div>
-      <h1>My New Feature</h1>
-      <p>This is a new nested route!</p>
-    </div>
-  );
-}
-
-export default MyNewFeaturePage;`}
-          </pre>
-        </div>
-
-        <div className="mb-6">
-          <h3 className="text-emerald-600 text-xl mb-2">
-            Step 2: Add Navigation Link
-          </h3>
-          <p className="text-gray-600 mb-2">
-            Add a navigation link in <code>DocsPage.tsx</code>:
-          </p>
-          <pre className="bg-slate-50 p-4 rounded-md text-sm text-slate-700 border border-slate-200 overflow-x-auto">
-{`<NavLink
-  to="/docs/mynewfeature"
-  className={({ isActive }) => {
-    const commonClasses = 
-      "py-2 px-6 rounded-lg text-lg no-underline " +
-      "transition-colors duration-200 ease-in-out";
-    if (isActive) {
-      return \`\${commonClasses} bg-green-600 text-white\`;
-    }
-    return \`\${commonClasses} bg-transparent text-slate-700 hover:bg-green-50\`;
-  }}
->
-  My New Feature
-</NavLink>`}
-          </pre>
-        </div>
-
-        <div>
-          <h3 className="text-emerald-600 text-xl mb-2">
-            Step 3: That's It! 🎉
-          </h3>
-          <p className="text-gray-600">
-            The dynamic routing system will automatically:
-          </p>
-          <ul className="text-gray-600 pl-6 mt-2 list-disc">
-            <li>Discover your new component</li>
-            <li>Create the route <code>/docs/mynewfeature</code></li>
-            <li>Make it accessible through navigation</li>
-          </ul>
-        </div>
       </div>
 
       <div className="mb-8 p-6 bg-emerald-50 rounded-lg border border-emerald-200">
