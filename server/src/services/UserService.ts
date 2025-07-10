@@ -11,6 +11,7 @@ export class UserEntity {
 }
 
 class UserService {
+
   private users: UserEntity[] = [
     {
       id: '1',
@@ -23,6 +24,10 @@ class UserService {
 
   async getUserByEmail(email: string): Promise<UserEntity | null> {
     return this.users.find(u => u.email === email) || null;
+  }
+
+  async getUserById(id: string): Promise<UserEntity | null> {
+    return this.users.find(u => u.id === id) || null;
   }
 
   async createUser({ name, email, password }: { name: string; email: string; password: string }): Promise<UserEntity> {
