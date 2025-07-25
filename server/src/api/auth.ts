@@ -13,10 +13,11 @@ import {
 import appConfig from '../appConfig.js';
 import { userService } from '../services/UserService.js';
 
-const router = Router();
+const publicRouter = Router();
+const protectedRouter = Router();
 
 // Login endpoint
-router.post('/login', (req: Request<LoginReqDto>, res: Response<ApiResponse<UserResDto>>, next: NextFunction) => {
+publicRouter.post('/login', (req: Request<LoginReqDto>, res: Response<ApiResponse<UserResDto>>, next: NextFunction) => {
   const loginHandler = async () => {
     try {
       const { email, password }: LoginReqDto = req.body;
@@ -66,7 +67,7 @@ router.post('/login', (req: Request<LoginReqDto>, res: Response<ApiResponse<User
 });
 
 // Signup endpoint
-router.post('/signup', (req: Request<LoginReqDto>, res: Response<ApiResponse<UserResDto>>, next: NextFunction) => {
+publicRouter.post('/signup', (req: Request<LoginReqDto>, res: Response<ApiResponse<UserResDto>>, next: NextFunction) => {
   const signupHandler = async () => {
     try {
       const { email, password }: LoginReqDto = req.body;
@@ -104,7 +105,7 @@ router.post('/signup', (req: Request<LoginReqDto>, res: Response<ApiResponse<Use
 });
 
 // Get current user (auth status check) - Protected by global auth middleware
-router.get('/me', async (req: Request, res: Response<ApiResponse<UserResDto>>, next: NextFunction) => {
+protectedRouter.get('/me', async (req: Request, res: Response<ApiResponse<UserResDto>>, next: NextFunction) => {
     try {
         const user = req.user; // Global auth middleware sets this
         if (!user) {
@@ -133,7 +134,7 @@ router.get('/me', async (req: Request, res: Response<ApiResponse<UserResDto>>, n
 });
 
 // Logout endpoint
-router.post('/logout', (req: Request, res: Response<ApiResponse<LogoutResDto>>, next: NextFunction) => {
+protectedRouter.post('/logout', (req: Request, res: Response<ApiResponse<LogoutResDto>>, next: NextFunction) => {
 
     // Clear the auth cookie
     res.clearCookie('auth-token', {
@@ -147,4 +148,7 @@ router.post('/logout', (req: Request, res: Response<ApiResponse<LogoutResDto>>, 
 
 });
 
-export default router;
+export {
+  publicRouter,
+  protectedRouter
+};

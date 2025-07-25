@@ -3,7 +3,7 @@ import cookieParser from 'cookie-parser';
 import { Server } from 'http';
 import configs from './appConfig.js';
 import logger from './utils/logger.js';
-import apiRouter from './routes/apiRouter.js';
+import { publicRouter, protectedRouter } from './routes/apiRouter.js';
 import staticRouter from './routes/staticRouter.js';
 import requestLoggerMiddleware from './middlewares/requestLoggerMiddleware.js';
 import errorHandlingMiddleware from './middlewares/errorHandlingMiddleware.js';
@@ -19,12 +19,11 @@ app.use(corsMiddleware); // CORS must be applied before other middleware
 app.use(cookieParser()); // Parse cookies
 app.use(express.json()); // Parse JSON bodies
 app.use(requestLoggerMiddleware);
-app.use('/api', globalAuthMiddleware);
-
 // ********************************************************  
 // Load Routes
 // ********************************************************
-app.use(apiRouter); // Apply auth middleware only to API routes
+app.use(publicRouter); 
+app.use(globalAuthMiddleware, protectedRouter);
 app.use(staticRouter); // Static file routes (SPA routing) - no auth needed
 
 // ********************************************************

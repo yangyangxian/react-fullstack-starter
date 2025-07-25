@@ -5,10 +5,11 @@ import { mapObject } from '../utils/mappers.js';
 import { createApiResponse } from '../utils/apiUtils.js';
 import { CustomError } from '../classes/CustomError.js';
 
-const router = Router();
+const protectedRouter = Router();
+const publicRouter = Router();
 
-// GET /api/users/email/:email
-router.get('/email/:email', async (req: Request<UserReqDto>, res: Response<ApiResponse<UserResDto>>, next: NextFunction) => {
+// GET /api/users/email/:email (protected)
+protectedRouter.get('/email/:email', async (req: Request<UserReqDto>, res: Response<ApiResponse<UserResDto>>, next: NextFunction) => {
   const email = req.params.email;
   const user = await userService.getUserByEmail(email);
   if (!user) {
@@ -18,4 +19,4 @@ router.get('/email/:email', async (req: Request<UserReqDto>, res: Response<ApiRe
   res.json(createApiResponse<UserResDto>(userDto));
 });
 
-export default router;
+export { protectedRouter, publicRouter };

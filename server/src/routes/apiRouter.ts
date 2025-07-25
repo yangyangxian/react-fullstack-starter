@@ -16,28 +16,28 @@ import logger from '../utils/logger.js';
  * - `api/users.ts` → `/api/users`
  */
 
-const router = Router();
 const apiDir = path.resolve(serverRootDir, './api');
 const basePath = '/api';
 
-// Load routes synchronously during module initialization
-// If there are errors, crash the server startup process
+// Collect all public and protected routers
+const publicRouter = Router();
+const protectedRouter = Router();
+
 try {
-  await loadApiRoutesFromFiles(router, apiDir, basePath);
-  logger.info(`✅ API routes loaded successfully from ${apiDir}`);
+  await loadApiRoutesFromFiles(publicRouter, protectedRouter, apiDir, basePath);
+  logger.info(`✅ API routers loaded successfully from ${apiDir}`);
 } catch (error) {
-  logger.error('❌ FATAL: Failed to load API routes during startup:', error);
-  process.exit(1); // Stop the server startup process
+  logger.error('❌ FATAL: Failed to load API routers during startup:', error);
+  process.exit(1);
 }
 
 /**
  * Loads API routes into the provided router
  */
-async function loadApiRoutesFromFiles(router: Router, apiDir: string, basePath: string): Promise<void> {
+async function loadApiRoutesFromFiles(publicRouter: Router, protectedRouter: Router, apiDir: string, basePath: string): Promise<void> {
   const files = fs.readdirSync(apiDir);
 
   for (const file of files) {
-    // Only include .ts or .js files, skip .d.ts and hidden files
     if (
       (file.endsWith('.ts') || file.endsWith('.js')) &&
       !file.endsWith('.d.ts') &&
@@ -45,29 +45,33 @@ async function loadApiRoutesFromFiles(router: Router, apiDir: string, basePath: 
     ) {
       const routeName = file.replace(/\.(ts|js)$/, '');
       if (!routeName) continue;
-      
+
       const routePath = `${basePath}/${routeName}`;
       const modulePath = path.join(apiDir, file);
       const moduleUrl = pathToFileURL(modulePath).href;
-      
+
       try {
         const routerModule = await import(moduleUrl);
-        const apiRouter = routerModule.default;
-        
-        if (!apiRouter) {
-          const errorMsg = `No default export found in ${file}. Each API route file must export a Router as default.`;
-          logger.error(errorMsg);
-          throw new Error(errorMsg);
+        let registered = false;
+        if (routerModule.publicRouter) {
+          publicRouter.use(routePath, routerModule.publicRouter);
+          logger.debug(`📍 Registered PUBLIC API route: ${routePath} from ${file}`);
+          registered = true;
         }
-        
-        router.use(routePath, apiRouter);
-        logger.debug(`📍 Registered API route: ${routePath} from ${file}`);
+        if (routerModule.protectedRouter) {
+          protectedRouter.use(routePath, routerModule.protectedRouter);
+          logger.debug(`📍 Registered PROTECTED API route: ${routePath} from ${file}`);
+          registered = true;
+        }
+        if (!registered) {
+          logger.warn(`⚠️ No publicRouter or protectedRouter exported from ${file}. Skipping.`);
+        }
       } catch (error) {
         logger.error(`❌ Failed to load API route from ${file}:`, error);
-        throw error; // Re-throw to stop the startup process
+        throw error;
       }
     }
   }
 }
 
-export default router;
+export { publicRouter, protectedRouter };
