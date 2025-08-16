@@ -23,8 +23,10 @@ app.use(requestLoggerMiddleware);
 // Load Routes
 // ********************************************************
 app.use(publicRouter); 
-app.use(globalAuthMiddleware, protectedRouter);
 app.use(staticRouter); // Static file routes (SPA routing) - no auth needed
+
+app.use("/api", globalAuthMiddleware); // Authenticated API routes with auth middleware
+app.use(protectedRouter); 
 
 // ********************************************************
 // Load Final Middleware

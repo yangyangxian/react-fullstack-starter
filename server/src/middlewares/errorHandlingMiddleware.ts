@@ -36,10 +36,7 @@ const errorHandler = (err: Error, req: Request, res: Response, next: NextFunctio
     ...(isDevelopment && { stack: errorStack }),
   };
 
-  const endpointInfo = `${req.method} ${req.originalUrl}`;
-  let errorLog = isDevelopment
-    ? `API Error: ${endpointInfo} (status code:${statusCode}): ${apiErrorResponse.stack}`
-    : `API Error: ${endpointInfo} (status code:${statusCode}): ${apiErrorResponse.code} | ${apiErrorResponse.message}`;
+  let errorLog = `[${req.method} ${req.originalUrl}] API Error(status code:${statusCode}) | Error Code: ${apiErrorResponse.code} | Error Message: ${apiErrorResponse.message} | Stack: ${errorStack}`;
   logger.error(errorLog);
 
   const finalResponse = createApiResponse<null>(null, apiErrorResponse);
