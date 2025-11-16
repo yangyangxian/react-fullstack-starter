@@ -77,11 +77,11 @@ function APIDataExamplePage() {
             value={userEmailInput}
             onChange={handleUserEmailInputChange}
             placeholder="Enter User Email (e.g., alice@demo.com)"
-            className="p-3 text-base border border-gray-300 rounded-lg outline-none w-full sm:w-auto flex-grow sm:flex-grow-0 sm:max-w-xs focus:border-pink-500 focus:ring-1 focus:ring-pink-500 transition-colors duration-150"
+            className="p-3 text-base border border-gray-300 rounded-lg outline-none w-full sm:w-auto grow sm:grow-0 sm:max-w-xs focus:border-pink-500 focus:ring-1 focus:ring-pink-500 transition-colors duration-150"
           />
           <button
             type="submit"
-            className="p-3 text-base bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white border-none rounded-lg cursor-pointer transition-all duration-200 w-full sm:w-auto shadow-md hover:shadow-lg"
+            className="p-3 text-base bg-linear-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white border-none rounded-lg cursor-pointer transition-all duration-200 w-full sm:w-auto shadow-md hover:shadow-lg"
           >
             Get User Data
           </button>

@@ -4,7 +4,7 @@ import { DOCS_PATH } from '@/routes/routeConfig';
 function HomePage() {
   const navigate = useNavigate();
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-green-50 to-pink-100">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-linear-to-br from-green-50 to-pink-100">
       <h1 className="text-4xl font-bold mb-6 text-green-600">
         Welcome to Our Fullstack starter
       </h1>
@@ -14,7 +14,7 @@ function HomePage() {
       <div>
         <button 
           onClick={() => navigate(DOCS_PATH)} 
-          className="py-3 px-8 text-base bg-gradient-to-r from-green-600 to-green-700 text-white border-none rounded-lg cursor-pointer transition-opacity duration-200 hover:opacity-90"
+          className="py-3 px-8 text-base bg-linear-to-r from-green-600 to-green-700 text-white border-none rounded-lg cursor-pointer transition-opacity duration-200 hover:opacity-90"
         >
           View Demo Documentation
         </button>
