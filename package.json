@@ -23,6 +23,6 @@
   },
   "devDependencies": {
     "concurrently": "^9.1.2",
-    "cross-env": "^7.0.3"
+    "cross-env": "^10.1.0"
   }
 }
