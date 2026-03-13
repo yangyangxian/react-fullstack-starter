@@ -10,9 +10,10 @@ description: Use when upgrading outdated npm dependencies in this monorepo and y
 Use this skill when updating dependencies in this repository. The workflow is strict:
 
 1. Upgrade in this order: `common` -> `client` -> `server`.
-2. Minor and patch updates can be applied directly.
-3. Major updates require stopping and asking for human confirmation before changing anything.
-4. After upgrades, run build scripts to confirm the repo still compiles.
+2. Use `npm-check-updates` to inspect and rewrite version ranges in `package.json`.
+3. Minor and patch updates can be applied directly.
+4. Major updates require stopping and asking for human confirmation before changing anything.
+5. After upgrades, reinstall dependencies and run build scripts to confirm the repo still compiles.
 
 ## When To Use
 
@@ -49,17 +50,17 @@ Examples:
 
 ## Workflow
 
-### 1. Inspect outdated packages
+### 1. Inspect candidate upgrades
 
-Check each workspace separately so the output stays attributable:
+Check each workspace separately with `npm-check-updates` so the output stays attributable and reflects version declaration changes:
 
 ```bash
-npm outdated --prefix common
-npm outdated --prefix client
-npm outdated --prefix server
+npx npm-check-updates --packageFile common/package.json
+npx npm-check-updates --packageFile client/package.json
+npx npm-check-updates --packageFile server/package.json
 ```
 
-If there are no outdated packages in a workspace, continue to the next one.
+If there are no candidate upgrades in a workspace, continue to the next one.
 
 ### 2. Split updates by risk
 
@@ -81,19 +82,31 @@ Minor/patch updates are ready to apply now. Confirm whether major updates should
 
 ### 3. Apply safe updates only
 
-Upgrade safe dependencies workspace by workspace.
+Rewrite `package.json` version ranges workspace by workspace.
 
 Preferred commands:
 
 ```bash
-npm update --prefix common
-npm update --prefix client
-npm update --prefix server
+npx npm-check-updates --packageFile common/package.json -u
+npx npm-check-updates --packageFile client/package.json -u
+npx npm-check-updates --packageFile server/package.json -u
 ```
 
-If a specific package must be targeted, install the exact approved version in the same workspace rather than upgrading unrelated packages.
+If a specific package must be targeted, use `npm-check-updates` filters or install the exact approved version in the same workspace rather than upgrading unrelated packages.
 
-### 4. Build after upgrades
+### 4. Reinstall after rewriting versions
+
+After `package.json` changes, reinstall dependencies so the lockfile and installed modules match the declared versions.
+
+Preferred commands:
+
+```bash
+npm install --prefix common
+npm install --prefix client
+npm install --prefix server
+```
+
+### 5. Build after upgrades
 
 Build verification is mandatory.
 
@@ -131,5 +144,6 @@ When reporting results, include:
 - Upgrading `client` or `server` before `common`.
 - Applying a major bump without explicit approval.
 - Treating `0.x` minor bumps as safe.
+- Using `npm update` as the main upgrade mechanism when the project expects `npm-check-updates` to rewrite declared versions.
 - Finishing the version bump without running build scripts.
-- Reporting success after only `npm install` or `npm update` without compile verification.
+- Reporting success after only rewriting versions or reinstalling packages without compile verification.
